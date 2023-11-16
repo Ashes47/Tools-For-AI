@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import List
 
 class Transcription(BaseModel):
   url: str
@@ -37,11 +37,33 @@ class PlantUML(BaseModel):
     }
 
 
-class TranscriptionResponse(BaseModel):
-  transcript: str
+class Transcriptslot(BaseModel):
+  text: str
+  start: float
+  duration: float
 
   class Config:
-    json_schema_extra = {"example": {"transcript": "hey everyone"}}
+    json_schema_extra = {
+        "example": {
+            "text": "hey",
+            "start": 0.00,
+            "duration": 3.00
+        }
+    }
+
+class TranscriptionResponse(BaseModel):
+  transcript: List[Transcriptslot]
+
+  class Config:
+    json_schema_extra = {
+        "example": {
+          "transcript" : [{
+            "text": "hey",
+            "start": 0.00,
+            "duration": 3.00
+        }]
+      }
+    }
 
 
 class ImageURL(BaseModel):

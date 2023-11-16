@@ -1,6 +1,8 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 import urllib.parse as urlparse
 import os
+from models import TranscriptionResponse, Transcriptslot
+from typing import List
 
 def getVideoId(URL):
   """
@@ -25,15 +27,32 @@ def getVideoId(URL):
   return None
 
 
-def getTranscription(URL):
+def makeSlots(transcription) -> List[Transcriptslot]:
+  result: List[Transcriptslot] = []
+
+  text = ""
+  dur = 0
+  start = 0
+  for obj in transcription:
+    text += " " + obj['text']
+    dur += obj['duration']
+    start = min(start, obj['start'])
+
+    if dur > 30:
+      result.append(Transcriptslot(text=text, start=start, duration=dur))
+      text = ""
+      start = start + dur
+      dur = 0
+
+  result.append(Transcriptslot(text=text, start=start, duration=dur))
+  return result
+
+
+def getTranscription(URL) -> List[Transcriptslot]:
   videoId = getVideoId(URL)
   transcription = YouTubeTranscriptApi.get_transcript(videoId)
 
-  text = ""
-  for ele in transcription:
-    text += ele['text'] + " "
-
-  return text
+  return makeSlots(transcription)
 
 
 def validateToken(token):

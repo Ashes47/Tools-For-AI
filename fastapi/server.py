@@ -47,15 +47,15 @@ def ping():
 def getTranscript(data: Transcription,
                   request: Request) -> TranscriptionResponse:
   """Get Youtube Transcription
-  This function takes in the URL for a YouTube video and returns it's transcription."""
+  This function takes in the URL for a YouTube video and returns it's transcription with start time and duration"""
   url = data.url
   token = request.headers["Authorization"]
   if not validateToken(token):
     raise Exception("Invalid Token")
   print(f"URL: {url}")
   print("Fetching transcription")
-  transcript = TranscriptionResponse(transcript=getTranscription(url))
-  return transcript
+  transcript = getTranscription(url)
+  return TranscriptionResponse(transcript=transcript)
 
 
 @app.post('/getPlantUML')
