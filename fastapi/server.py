@@ -36,7 +36,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 ############## HealthCheck ##########################################################
 @app.get("/ping")
-def ping():
+async def ping():
   return {"ping": "pong"}
 
 
@@ -44,7 +44,7 @@ def ping():
 
 
 @app.post("/getTranscript")
-def getTranscript(data: Transcription,
+async def getTranscript(data: Transcription,
                   request: Request) -> TranscriptionResponse:
   """Get Youtube Transcription
   This function takes in the URL for a YouTube video and returns it's transcription with start time and duration"""
@@ -54,12 +54,12 @@ def getTranscript(data: Transcription,
     raise Exception("Invalid Token")
   print(f"URL: {url}")
   print("Fetching transcription")
-  transcript = getTranscription(url)
+  transcript = await getTranscription(url)
   return TranscriptionResponse(transcript=transcript)
 
 
 @app.post('/getPlantUML')
-def getPlantUML(data: PlantUML, request: Request) -> ImageURL:
+async def getPlantUML(data: PlantUML, request: Request) -> ImageURL:
   """Get PlantUML Image
   This functions takes in code for the mindmap diagram in Markmap language for plantUML and returns plantUML Image
   """
@@ -69,7 +69,7 @@ def getPlantUML(data: PlantUML, request: Request) -> ImageURL:
   plantumlText = data.plantumlText
   print(f"PlantUML Text Recieved: {plantumlText}")
 
-  fileName = createPlantUML(plantumlText)
+  fileName = await createPlantUML(plantumlText)
   img_url = request.url_for('static', path=fileName)
   return ImageURL(imageURL=img_url._url)
 
@@ -78,7 +78,7 @@ def getPlantUML(data: PlantUML, request: Request) -> ImageURL:
 
 
 @app.post('/getMermaid')
-def getMermaid(data: Mermaid, request: Request) -> ImageURL:
+async def getMermaid(data: Mermaid, request: Request) -> ImageURL:
   """Get Mermaid Image
   This functions takes in code for the mindmap diagram in Markmap language for Mermaid and returns Mermaid Image
   """
@@ -88,7 +88,7 @@ def getMermaid(data: Mermaid, request: Request) -> ImageURL:
   mermaidText = data.mermaidText
   print(f"Mermaid Text Recieved : {mermaidText}")
 
-  fileName = createMermaid(mermaidText)
+  fileName = await createMermaid(mermaidText)
   img_url = request.url_for('static', path=fileName)
   return ImageURL(imageURL=img_url._url)
 
@@ -97,7 +97,7 @@ def getMermaid(data: Mermaid, request: Request) -> ImageURL:
 
 
 @app.get('/clean')
-def clean(request: Request):
+async def clean(request: Request):
   token = request.headers["Authorization"]
   folder = './static'
   for filename in os.listdir(folder):
@@ -114,7 +114,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/privacy", response_class=HTMLResponse)
-def signin(request: Request):
+async def privacy(request: Request):
   return templates.TemplateResponse("privacy.html",
                                     context={"request": request})
 

@@ -4,7 +4,7 @@ from plantuml import PlantUML
 import uuid
 
 
-def createPlantUML(plantumlText):
+async def createPlantUML(plantumlText):
 
   # create a server object to call for your computations
   print("Calling PlantUML Server")

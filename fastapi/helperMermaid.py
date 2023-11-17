@@ -5,7 +5,7 @@ import requests
 import uuid
 
 
-def createMermaid(mermaidGraph):
+async def createMermaid(mermaidGraph):
 
   graphbytes = mermaidGraph.encode("ascii")
 
