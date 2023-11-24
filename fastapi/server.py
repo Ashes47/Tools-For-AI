@@ -135,6 +135,12 @@ def custom_openapi():
       description=
       "API for converting youtube videos to transcript and creating mindmaps",
       routes=app.routes,
+      servers=[
+            {
+                "url": "https://mewow.dev",
+                "description": "Youtube to Mindmap"
+            }
+        ]
   )
   openapi_schema["info"]["x-logo"] = {
       "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
