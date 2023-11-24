@@ -21,7 +21,7 @@ app = FastAPI(
     description=
     """API for converting youtube videos to transcript and creating mindmaps""",
     version="1.0.0",
-    "servers": [
+    "servers"= [
         {
             "url": "https://mewow.dev" 
         }
