@@ -53,7 +53,7 @@ async def ping():
 async def getTranscript(data: Transcription,
                   request: Request) -> TranscriptionResponse:
   """Get Youtube Transcription
-  This function takes in the URL for a YouTube video and returns it's transcription with start time and duration"""
+  This function takes in the URL for a YouTube video and returns it's transcription with start time and duration in seconds"""
   url = data.url
   token = request.headers["Authorization"]
   if not validateToken(token):
