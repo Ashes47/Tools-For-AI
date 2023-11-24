@@ -21,11 +21,12 @@ app = FastAPI(
     description=
     """API for converting youtube videos to transcript and creating mindmaps""",
     version="1.0.0",
-    "servers"= [
-        {
-            "url": "https://mewow.dev" 
-        }
-    ]
+    servers=[
+            {
+                "url": "https://mewow.dev",
+                "description": "Youtube to Mindmap"
+            }
+        ]
 )
 
 app.add_middleware(
