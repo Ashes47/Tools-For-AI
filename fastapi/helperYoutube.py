@@ -50,7 +50,7 @@ def makeSlots(transcription) -> List[Transcriptslot]:
 
 async def getTranscription(URL) -> List[Transcriptslot]:
   videoId = getVideoId(URL)
-  transcription = YouTubeTranscriptApi.get_transcript(videoId)
+  transcription = YouTubeTranscriptApi.get_transcript(video_id=videoId, languages=["en", "de", "hi"])
 
   return makeSlots(transcription)
 
