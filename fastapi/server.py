@@ -21,6 +21,12 @@ app = FastAPI(
     description=
     """API for converting youtube videos to transcript and creating mindmaps""",
     version="1.0.0",
+    servers=[
+            {
+                "url": "https://mewow.dev",
+                "description": "Youtube to Mindmap"
+            }
+        ]
 )
 
 app.add_middleware(
@@ -47,7 +53,7 @@ async def ping():
 async def getTranscript(data: Transcription,
                   request: Request) -> TranscriptionResponse:
   """Get Youtube Transcription
-  This function takes in the URL for a YouTube video and returns it's transcription with start time and duration"""
+  This function takes in the URL for a YouTube video and returns it's transcription with start time and duration in seconds"""
   url = data.url
   token = request.headers["Authorization"]
   if not validateToken(token):
@@ -129,6 +135,12 @@ def custom_openapi():
       description=
       "API for converting youtube videos to transcript and creating mindmaps",
       routes=app.routes,
+      servers=[
+            {
+                "url": "https://mewow.dev",
+                "description": "Youtube to Mindmap"
+            }
+        ]
   )
   openapi_schema["info"]["x-logo"] = {
       "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
