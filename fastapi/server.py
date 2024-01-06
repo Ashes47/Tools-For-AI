@@ -2,7 +2,7 @@
 import os
 from threading import Thread
 # Third-party library imports
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
@@ -76,6 +76,8 @@ async def getPlantUML(data: PlantUML, request: Request) -> ImageURL:
   print(f"PlantUML Text Recieved: {plantumlText}")
 
   fileName = await createPlantUML(plantumlText)
+  if fileName == "Incorrect Code":
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Bad PlantUML code")
   img_url = request.url_for('static', path=fileName)
   return ImageURL(imageURL=img_url._url)
 
@@ -95,6 +97,8 @@ async def getMermaid(data: Mermaid, request: Request) -> ImageURL:
   print(f"Mermaid Text Recieved : {mermaidText}")
 
   fileName = await createMermaid(mermaidText)
+  if fileName == "Incorrect Code":
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Bad Mermaid code")
   img_url = request.url_for('static', path=fileName)
   return ImageURL(imageURL=img_url._url)
 
