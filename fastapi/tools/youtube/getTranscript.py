@@ -1,8 +1,12 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 import urllib.parse as urlparse
-import os
-from models import TranscriptionResponse, Transcriptslot
+from tools.youtube.models import (
+    Transcription,
+    TranscriptionResponse,
+    TranscriptionObject,
+)
 from typing import List
+
 
 def getVideoId(URL):
     """
@@ -31,36 +35,30 @@ def getVideoId(URL):
     return None
 
 
-def makeSlots(transcription) -> List[Transcriptslot]:
-  result: List[Transcriptslot] = []
+def makeSlots(transcription) -> TranscriptionResponse:
+    result: List[TranscriptionObject] = []
 
-  text = ""
-  dur = 0
-  start = 0
-  for obj in transcription:
-    text += " " + obj['text']
-    dur += obj['duration']
-    start = min(start, obj['start'])
+    text = ""
+    dur = 0
+    start = 0
+    for obj in transcription:
+        text += " " + obj["text"]
+        dur += obj["duration"]
+        start = min(start, obj["start"])
 
-    if dur > 30:
-      result.append(Transcriptslot(text=text, start=start, duration=dur))
-      text = ""
-      start = start + dur
-      dur = 0
+        if dur > 30:
+            result.append(TranscriptionObject(text=text, start=start, duration=dur))
+            text = ""
+            start = start + dur
+            dur = 0
 
-  result.append(Transcriptslot(text=text, start=start, duration=dur))
-  return result
-
-
-async def getTranscription(URL) -> List[Transcriptslot]:
-  videoId = getVideoId(URL)
-  transcription = YouTubeTranscriptApi.get_transcript(video_id=videoId, languages=["en", "de", "hi"])
-
-  return makeSlots(transcription)
+    result.append(TranscriptionObject(text=text, start=start, duration=dur))
+    return result
 
 
-def validateToken(token):
-  if token == os.environ['token']:
-    return True
-
-  return False
+async def getTranscription(transcription: Transcription) -> TranscriptionResponse:
+    videoId = getVideoId(transcription.url)
+    transcription = YouTubeTranscriptApi.get_transcript(
+        video_id=videoId, languages=[transcription.language.value]
+    )
+    return makeSlots(transcription)

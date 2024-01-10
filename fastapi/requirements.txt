@@ -1,9 +1,25 @@
+# Web Framework
 fastapi
+
+# Server
 uvicorn
+
+# Environment
 python-dotenv
+
+# Data Models
 pydantic
 pillow
+
+# Lint
+black
+
+# Utilities
 plantuml
 youtube-transcript-api
 starlette
+matplotlib
+seaborn
+
+# Others
 redberry
