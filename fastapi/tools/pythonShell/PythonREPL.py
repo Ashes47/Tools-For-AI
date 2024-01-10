@@ -91,7 +91,6 @@ class PythonREPL(BaseModel):
     def run(
         self,
         command: str,
-        timeout: Optional[int] = 10,
         seaborn_config: Optional[Dict[str, Any]] = None,
     ) -> Tuple[str, Optional[Image.Image]]:
         """
@@ -110,7 +109,7 @@ class PythonREPL(BaseModel):
         with ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(self.execute_code, command, safe_modules, seaborn_config)
             try:
-                return future.result(timeout=timeout)
+                return future.result(timeout=10)
             except TimeoutError:
                 logger.warning("Code execution timed out")
                 return "Execution timed out", None
