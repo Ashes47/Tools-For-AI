@@ -1,9 +1,10 @@
 # fastapi library imports
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
-
+from fastapi.responses import HTMLResponse
+from starlette.templating import Jinja2Templates
 # Local imports
 from constants import URL, IMAGE_DIR
 
@@ -27,7 +28,13 @@ app.include_router(api_router)
 app.mount("/" + IMAGE_DIR, StaticFiles(directory="images"), name="images")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+templates = Jinja2Templates(directory="templates")
 
+
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy(request: Request):
+  return templates.TemplateResponse("privacy.html",
+                                    context={"request": request})
 # Swagger
 def custom_openapi():
     if app.openapi_schema:
