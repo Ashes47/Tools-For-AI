@@ -31,7 +31,7 @@ async def getTranscript(data: Transcription, request: Request) -> TranscriptionR
 
 # Create a Mermaid Diagram from text
 @toolsRouter.post("/createMermaid")
-async def getMermaid(data: Mermaid, request: Request) -> ImageURL:
+async def createMermaid(data: Mermaid, request: Request) -> ImageURL:
     """Get Mermaid Image
     This functions takes in code for the mindmap diagram in Markmap language for Mermaid and returns Mermaid Image
     """
@@ -48,7 +48,7 @@ async def getMermaid(data: Mermaid, request: Request) -> ImageURL:
 
 # Create a Plantuml Diagram from text
 @toolsRouter.post("/createPlantuml")
-async def getPlantuml(data: PlantUML, request: Request) -> ImageURL:
+async def createPlantuml(data: PlantUML, request: Request) -> ImageURL:
     """Get Plantuml Image
     This functions takes in code for the Plantuml diagram in Markmap language for Plantuml and returns Plantuml Image
     """
@@ -65,7 +65,7 @@ async def getPlantuml(data: PlantUML, request: Request) -> ImageURL:
 
 # Create a Matplotlib Diagram from text
 @toolsRouter.post("/createMatplotlib")
-async def getMermaid(data: CommandRequest, request: Request) -> CommandResponse:
+async def createMatplotlib(data: CommandRequest, request: Request) -> CommandResponse:
     """Get Matplotlib Image
     This functions takes in code in python language to create matplotlib diagram and returns the matplotlib diagram generated
     """
@@ -80,7 +80,7 @@ async def getMermaid(data: CommandRequest, request: Request) -> CommandResponse:
 
 # Create a Seaborn Diagram from text
 @toolsRouter.post("/createSeaborn")
-async def getMermaid(data: CommandRequest, request: Request) -> CommandResponse:
+async def createSeaborn(data: CommandRequest, request: Request) -> CommandResponse:
     """Get Seaborn Image
     This functions takes in code in python language to create stunning seaborn diagram and returns the seaborn diagram generated
     """

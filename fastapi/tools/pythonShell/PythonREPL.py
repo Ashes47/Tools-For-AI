@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # Restricted environment
 RESTRICTED_PATTERNS = [
     r"(__import__|open|exec|eval|multiprocessing|compile|globals|locals|getattr|setattr|delattr|vars|input)",
-    r"(subprocess|os|sys|file|io|shutil)",
+    r"(import subprocess|import os|import sys|import file|import io|import shutil)",
     r"system\(|popen\(",
 ]
 SAFE_MODULES = ["matplotlib.pyplot", "seaborn"]
