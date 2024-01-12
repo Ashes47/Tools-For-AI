@@ -135,6 +135,7 @@ async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandR
         raise Exception("Invalid Token")
 
     print(f"Apexcharts request received:\n{data.config}")
+    storeCodeAsFile(data.config, f"apexcharts")
 
     return await createApexCharts(data)
 
@@ -149,6 +150,7 @@ async def createGraphviz(data: GraphvizRequest, request: Request) -> CommandResp
         raise Exception("Invalid Token")
 
     print(f"Graphviz request received:\n{data.graph}")
+    storeCodeAsFile(data.graph, f"graphviz")
 
     return await createGraphViz(data)
 
@@ -166,5 +168,6 @@ async def createQuickChart(
         raise Exception("Invalid Token")
 
     print(f"QuickChart request received:\n{data.chart}")
+    storeCodeAsFile(data.chart, f"quickcharts")
 
     return await createQuickCharts(data)
