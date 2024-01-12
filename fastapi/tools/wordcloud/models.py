@@ -98,22 +98,22 @@ class WordCloud(BaseModel):
 
 class WordCloudRequest(BaseModel):
     text: str
-    width: Optional[int]
-    height: Optional[int]
-    backgroundColor: Optional[str]
-    fontFamily: Optional[str]
-    fontWeight: Optional[str]
-    fontScale:  Optional[int]
-    padding: Optional[int]
-    rotation: Optional[int]
-    maxNumWords: Optional[int]
-    minWordLength: Optional[int]
-    scale: Optional[ScaleType]
-    case: Optional[Case]
-    colors: Optional[List[str]]
-    removeStopwords: Optional[bool]
-    cleanWords: Optional[bool]
-    language: Optional[LanguageCode]
+    width: Optional[int] = None
+    height: Optional[int] = None
+    backgroundColor: Optional[str] = None
+    fontFamily: Optional[str] = None
+    fontWeight: Optional[str] = None
+    fontScale:  Optional[int] = None
+    padding: Optional[int] = None
+    rotation: Optional[int] = None
+    maxNumWords: Optional[int] = None
+    minWordLength: Optional[int] = None
+    scale: Optional[ScaleType] = None
+    case: Optional[Case] = None
+    colors: Optional[List[str]] = None
+    removeStopwords: Optional[bool] = None
+    cleanWords: Optional[bool] = None
+    language: Optional[LanguageCode] = None
 
     class Config:
         json_schema_extra = {
@@ -140,25 +140,28 @@ class WordCloudRequest(BaseModel):
 
 
 def create_word_cloud(request: WordCloudRequest) -> WordCloud:
+    # Create a default instance of WordCloud to use for default values
+    default_word_cloud = WordCloud(text=request.text)
+
     # Create a WordCloud object using the data from WordCloudRequest
     return WordCloud(
         text=request.text,
         format='png',
-        width=request.width or WordCloud.width,
-        height=request.height or WordCloud.height,
-        backgroundColor=request.backgroundColor or WordCloud.backgroundColor,
-        fontFamily=request.fontFamily or WordCloud.fontFamily,
-        fontWeight=request.fontWeight or WordCloud.fontWeight,
-        fontScale=request.fontScale or WordCloud.fontScale,
-        scale=request.scale or WordCloud.scale,
-        padding=request.padding or WordCloud.padding,
-        rotation=request.rotation or WordCloud.rotation,
-        maxNumWords=request.maxNumWords or WordCloud.maxNumWords,
-        minWordLength=request.minWordLength or WordCloud.minWordLength,
-        case=request.case or WordCloud.case,
+        width=request.width or default_word_cloud.width,
+        height=request.height or default_word_cloud.height,
+        backgroundColor=request.backgroundColor or default_word_cloud.backgroundColor,
+        fontFamily=request.fontFamily or default_word_cloud.fontFamily,
+        fontWeight=request.fontWeight or default_word_cloud.fontWeight,
+        fontScale=request.fontScale or default_word_cloud.fontScale,
+        scale=request.scale or default_word_cloud.scale,
+        padding=request.padding or default_word_cloud.padding,
+        rotation=request.rotation or default_word_cloud.rotation,
+        maxNumWords=request.maxNumWords or default_word_cloud.maxNumWords,
+        minWordLength=request.minWordLength or default_word_cloud.minWordLength,
+        case=request.case or default_word_cloud.case,
         colors=request.colors,
-        removeStopwords=request.removeStopwords if request.removeStopwords is not None else WordCloud.removeStopwords,
-        cleanWords=request.cleanWords if request.cleanWords is not None else WordCloud.cleanWords,
-        language=request.language or WordCloud.language,
+        removeStopwords=request.removeStopwords if request.removeStopwords is not None else default_word_cloud.removeStopwords,
+        cleanWords=request.cleanWords if request.cleanWords is not None else default_word_cloud.cleanWords,
+        language=request.language or default_word_cloud.language,
         useWordList=False
     )

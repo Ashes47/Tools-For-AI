@@ -9,7 +9,7 @@ from tools.plantuml.createImage import createPlantUML
 from tools.pythonShell.models import CommandRequest
 from tools.models import CommandResponse
 from tools.pythonShell.createImage import execute_command
-from tools.wordcloud.models import WordCloudRequest
+from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
 from store.saveCode import storeCodeAsFile
 
@@ -112,4 +112,4 @@ async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandRe
     
     print(f"Wordcloud request received:\n{data.text}")
 
-    return await createWordCloud(data)
+    return await createWordCloud(create_word_cloud(data))

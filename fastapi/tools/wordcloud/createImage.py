@@ -2,16 +2,15 @@ import os
 import requests
 import uuid
 from constants import WORDCLOUD_IMAGE_DIR, IMAGE_DIR
-from tools.wordcloud.models import WordCloudRequest, create_word_cloud
+from tools.wordcloud.models import WordCloud
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createWordCloud(data: WordCloudRequest) -> CommandResponse:
+async def createWordCloud(data: WordCloud) -> CommandResponse:
 
     try:
-        payload = create_word_cloud(data)
-        response = requests.post('https://quickchart.io/wordcloud', json=payload.dict())
+        response = requests.post('https://quickchart.io/wordcloud', json=data.dict())
         if response.status_code == 200:
             print("Saving Image")
 
