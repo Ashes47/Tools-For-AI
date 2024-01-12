@@ -1,3 +1,10 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -9,9 +16,9 @@ jobs:
       - name: SSH into the remote server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ DROPLET_IP }}
-          username: ${{ SSH_USER }}
-          password: ${{ SSH_PASSWORD }}
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd custom-gpts
             git pull origin main
