@@ -94,7 +94,7 @@ class WordCloud(BaseModel):
     removeStopwords: bool = True
     cleanWords: bool = True
     language: LanguageCode = LanguageCode.English
-    useWordList: bool = False
+    useWordList: bool = True
 
 class WordCloudRequest(BaseModel):
     text: str
@@ -118,7 +118,7 @@ class WordCloudRequest(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "text": "Example word cloud text",
+                "text": "hello:10,world:5,testing:5,123",
                 "width": 800,
                 "height": 600,
                 "backgroundColor": "#ffffff",
@@ -163,5 +163,5 @@ def create_word_cloud(request: WordCloudRequest) -> WordCloud:
         removeStopwords=request.removeStopwords if request.removeStopwords is not None else default_word_cloud.removeStopwords,
         cleanWords=request.cleanWords if request.cleanWords is not None else default_word_cloud.cleanWords,
         language=request.language or default_word_cloud.language,
-        useWordList=False
+        useWordList=True
     )

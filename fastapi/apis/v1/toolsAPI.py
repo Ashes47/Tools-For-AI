@@ -105,6 +105,7 @@ async def createSeaborn(data: CommandRequest, request: Request) -> CommandRespon
 async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandResponse:
     """Create WordCloud
     This function takes in text with optional other parameters and creates a wordcloud.
+    text: keywords with count. ex: "hello:10,world:5,testing:5,123"
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
