@@ -15,6 +15,8 @@ from tools.apexgraphs.createImage import createApexCharts
 from tools.apexgraphs.models import ApexChartRequest
 from tools.graphviz.models import GraphvizRequest
 from tools.graphviz.createImage import createGraphViz
+from tools.quickchart.createImage import createQuickCharts
+from tools.quickchart.models import QuickChartRequest
 from store.saveCode import storeCodeAsFile
 
 toolsRouter = APIRouter(prefix="/tool")
@@ -149,3 +151,20 @@ async def createGraphviz(data: GraphvizRequest, request: Request) -> CommandResp
     print(f"Graphviz request received:\n{data.graph}")
 
     return await createGraphViz(data)
+
+
+@toolsRouter.post("/createQuickChart")
+async def createQuickChart(
+    data: QuickChartRequest, request: Request
+) -> CommandResponse:
+    """
+    Create QuickChart
+    This function chart in text with width and height and background color and creates a QuickChart.
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+
+    print(f"QuickChart request received:\n{data.chart}")
+
+    return await createQuickCharts(data)
