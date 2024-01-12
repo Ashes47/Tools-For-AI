@@ -138,7 +138,7 @@ async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandR
 
 
 @toolsRouter.post("/createGraphviz")
-async def createApexcharts(data: GraphvizRequest, request: Request) -> CommandResponse:
+async def createGraphviz(data: GraphvizRequest, request: Request) -> CommandResponse:
     """Get Graphviz Image
     This functions takes in code for the Graphviz diagram in Markmap language with layout and returns Graphviz Image
     """
