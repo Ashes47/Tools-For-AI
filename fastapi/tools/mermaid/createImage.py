@@ -6,8 +6,8 @@ import requests
 import uuid
 from constants import MERMAID_IMAGE_DIR, IMAGE_DIR
 from tools.mermaid.models import Diagrams
-from tools.models import ImageURL
-from tools.urlBuilder import urlFor
+from tools.models import CommandResponse
+from tools.urlBuilder import urlFor, staticURL
 
 
 async def createMermaidDiagram(mermaidGraph, diagram):
@@ -30,11 +30,15 @@ async def createMermaidDiagram(mermaidGraph, diagram):
             os.makedirs(path)
 
         imageFile.save(f"{path}/{id}.png")
-        return ImageURL(
-            imageURL=urlFor(f"{MERMAID_IMAGE_DIR}/{diagramDirectory}/{id}.png")
+        return CommandResponse(
+            output="Image Generated", imageURL=urlFor(f"{MERMAID_IMAGE_DIR}/{diagramDirectory}/{id}.png")
         )
+    
     except:
-        return "Incorrect mermaid Code, fix the code and try again"
+        return CommandResponse(
+            output=f"error: fix the code and try again",
+            imageURL=staticURL("invalid.png"),
+        )
 
 
 def getDirectory(diagram: Diagrams) -> str:

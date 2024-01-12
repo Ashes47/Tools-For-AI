@@ -5,8 +5,8 @@ from plantuml import PlantUML
 import uuid
 from constants import PLANTUML_IMAGE_DIR, IMAGE_DIR
 from tools.plantuml.models import Diagrams
-from tools.models import ImageURL
-from tools.urlBuilder import urlFor
+from tools.models import CommandResponse
+from tools.urlBuilder import urlFor, staticURL
 
 
 async def createPlantUML(plantumlText, diagram):
@@ -35,11 +35,14 @@ async def createPlantUML(plantumlText, diagram):
             os.makedirs(path)
 
         imageFile.save(f"{path}/{id}.png")
-        return ImageURL(
-            imageURL=urlFor(f"{PLANTUML_IMAGE_DIR}/{diagramDirectory}/{id}.png")
+        return CommandResponse(
+            output="Image Generated", imageURL=urlFor(f"{PLANTUML_IMAGE_DIR}/{diagramDirectory}/{id}.png")
         )
     except:
-        return "Incorrect Plantuml Code, fix the code and try again"
+        return CommandResponse(
+            output=f"error: fix the code and try again",
+            imageURL=staticURL("invalid.png"),
+        )
 
 
 def getDirectory(diagram):

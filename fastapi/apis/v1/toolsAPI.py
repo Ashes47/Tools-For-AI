@@ -2,13 +2,15 @@ from fastapi import APIRouter, Request
 from auth import validateToken
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
-from tools.models import ImageURL
 from tools.mermaid.models import Mermaid
 from tools.mermaid.createImage import createMermaidDiagram
 from tools.plantuml.models import PlantUML
 from tools.plantuml.createImage import createPlantUML
-from tools.pythonShell.models import CommandRequest, CommandResponse
+from tools.pythonShell.models import CommandRequest
+from tools.models import CommandResponse
 from tools.pythonShell.createImage import execute_command
+from tools.wordcloud.models import WordCloudRequest
+from tools.wordcloud.createImage import createWordCloud
 from store.saveCode import storeCodeAsFile
 
 toolsRouter = APIRouter(prefix="/tool")
@@ -31,7 +33,7 @@ async def getTranscript(data: Transcription, request: Request) -> TranscriptionR
 
 # Create a Mermaid Diagram from text
 @toolsRouter.post("/createMermaid")
-async def createMermaid(data: Mermaid, request: Request) -> ImageURL:
+async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
     """Get Mermaid Image
     This functions takes in code for the mindmap diagram in Markmap language for Mermaid and returns Mermaid Image
     """
@@ -48,7 +50,7 @@ async def createMermaid(data: Mermaid, request: Request) -> ImageURL:
 
 # Create a Plantuml Diagram from text
 @toolsRouter.post("/createPlantuml")
-async def createPlantuml(data: PlantUML, request: Request) -> ImageURL:
+async def createPlantuml(data: PlantUML, request: Request) -> CommandResponse:
     """Get Plantuml Image
     This functions takes in code for the Plantuml diagram in Markmap language for Plantuml and returns Plantuml Image
     """
@@ -98,3 +100,16 @@ async def createSeaborn(data: CommandRequest, request: Request) -> CommandRespon
     print(f"Python Code Recieved:\n{data.code}")
 
     return await execute_command(data, seaborn_config)
+
+@toolsRouter.post("/createWordcloud")
+async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandResponse:
+    """Create WordCloud
+    This function takes in text with optional other parameters and creates a wordcloud.
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+    
+    print(f"Wordcloud request received:\n{data.text}")
+
+    return await createWordCloud(data)

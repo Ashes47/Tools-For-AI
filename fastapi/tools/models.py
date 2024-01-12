@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
 
-class ImageURL(BaseModel):
+class CommandResponse(BaseModel):
+    output: str
     imageURL: str
 
     class Config:
-        json_schema_extra = {"example": {"imageURL": "https://example.com/image.png"}}
+        json_schema_extra = {"example": {"imageURL": "https://example.com/image.png",
+                                         "output": "Image Generated"}}

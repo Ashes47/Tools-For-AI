@@ -1,4 +1,5 @@
-from tools.pythonShell.models import CommandRequest, CommandResponse, Method
+from tools.pythonShell.models import CommandRequest
+from tools.models import CommandResponse
 from io import BytesIO
 import os
 import uuid
