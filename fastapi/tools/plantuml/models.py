@@ -20,6 +20,7 @@ class Diagrams(str, Enum):
     TIMING = "Timing Diagram"
     UML_USE_CASE = "UML Use Case Diagram"
     WIRE_FRAME = "Wire Frame Diagram"
+    OTHER = "Other"
 
 
 class PlantUML(BaseModel):
