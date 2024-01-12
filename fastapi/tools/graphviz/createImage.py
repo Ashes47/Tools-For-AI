@@ -1,22 +1,24 @@
 import os
 import requests
 import uuid
-from constants import APEXCHARTS_IMAGE_DIR, IMAGE_DIR
-from tools.apexgraphs.models import ApexChartRequest
+from constants import GRAPHVIZ_IMAGE_DIR, IMAGE_DIR
+from tools.graphviz.models import GraphvizRequest
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createApexCharts(data: ApexChartRequest) -> CommandResponse:
+async def createGraphViz(data: GraphvizRequest) -> CommandResponse:
     try:
-        response = requests.get(
-            "https://quickchart.io/apex-charts/render", params=data.dict()
+        response = requests.post(
+            "https://quickchart.io/graphviz",
+            json={"graph": data.graph, "layout": data.layout.value, "format": "png"},
         )
+
         if response.status_code == 200:
             print("Saving Image")
 
             id = str(uuid.uuid4())
-            path = os.getcwd() + f"/{IMAGE_DIR}/{APEXCHARTS_IMAGE_DIR}/{data.chartType}"
+            path = os.getcwd() + f"/{IMAGE_DIR}/{GRAPHVIZ_IMAGE_DIR}"
 
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -26,8 +28,9 @@ async def createApexCharts(data: ApexChartRequest) -> CommandResponse:
 
             return CommandResponse(
                 output="Image Generated",
-                imageURL=urlFor(f"{APEXCHARTS_IMAGE_DIR}/{data.chartType}/{id}.png"),
+                imageURL=urlFor(f"{GRAPHVIZ_IMAGE_DIR}/{id}.png"),
             )
+
     except:
         return CommandResponse(
             output=f"Error generating wordcloud",

@@ -1,6 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel
 
+
 # Define the enumeration for chart types
 class ChartType(Enum):
     LINE = "Line_Chart"

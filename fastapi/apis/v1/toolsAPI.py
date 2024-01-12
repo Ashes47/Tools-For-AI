@@ -13,6 +13,8 @@ from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
 from tools.apexgraphs.createImage import createApexCharts
 from tools.apexgraphs.models import ApexChartRequest
+from tools.graphviz.models import GraphvizRequest
+from tools.graphviz.createImage import createGraphViz
 from store.saveCode import storeCodeAsFile
 
 toolsRouter = APIRouter(prefix="/tool")
@@ -133,3 +135,17 @@ async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandR
     print(f"Apexcharts request received:\n{data.config}")
 
     return await createApexCharts(data)
+
+
+@toolsRouter.post("/createGraphviz")
+async def createApexcharts(data: GraphvizRequest, request: Request) -> CommandResponse:
+    """Get Graphviz Image
+    This functions takes in code for the Graphviz diagram in Markmap language with layout and returns Graphviz Image
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+
+    print(f"Graphviz request received:\n{data.graph}")
+
+    return await createGraphViz(data)
