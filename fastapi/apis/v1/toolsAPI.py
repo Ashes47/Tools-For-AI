@@ -11,6 +11,8 @@ from tools.models import CommandResponse
 from tools.pythonShell.createImage import execute_command
 from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
+from tools.apexgraphs.createImage import createApexCharts
+from tools.apexgraphs.models import ApexChartRequest
 from store.saveCode import storeCodeAsFile
 
 toolsRouter = APIRouter(prefix="/tool")
@@ -116,3 +118,18 @@ async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandRe
     print(f"Wordcloud request received:\n{data.text}")
 
     return await createWordCloud(create_word_cloud(data))
+
+
+@toolsRouter.post("/createApexcharts")
+async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandResponse:
+    """
+    Create Apexcharts
+    This function takes in config with optional width and height and creates an Apexcharts.
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+
+    print(f"Apexcharts request received:\n{data.config}")
+
+    return await createApexCharts(data)
