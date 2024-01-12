@@ -101,6 +101,7 @@ async def createSeaborn(data: CommandRequest, request: Request) -> CommandRespon
 
     return await execute_command(data, seaborn_config)
 
+
 @toolsRouter.post("/createWordcloud")
 async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandResponse:
     """Create WordCloud
@@ -110,7 +111,7 @@ async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandRe
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
-    
+
     print(f"Wordcloud request received:\n{data.text}")
 
     return await createWordCloud(create_word_cloud(data))

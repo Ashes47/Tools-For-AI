@@ -17,8 +17,8 @@ def storeCodeAsFile(code, file_type):
         os.makedirs(dir_path)
 
     # Define the file path
-    file_path = os.path.join(dir_path, str(uuid.uuid4()) + '.txt')
+    file_path = os.path.join(dir_path, str(uuid.uuid4()) + ".txt")
 
     # Write the message to the file
-    with open(file_path, 'w') as file:
+    with open(file_path, "w") as file:
         file.write(code)

@@ -2,15 +2,18 @@ from pydantic import BaseModel, constr
 from typing import List, Optional
 from enum import Enum
 
+
 class ScaleType(str, Enum):
-    linear = 'linear'
-    sqrt = 'sqrt'
-    log = 'log'
+    linear = "linear"
+    sqrt = "sqrt"
+    log = "log"
+
 
 class Case(str, Enum):
-    upper = 'upper'
-    lower = 'lower'
-    none = 'none'
+    upper = "upper"
+    lower = "lower"
+    none = "none"
+
 
 class LanguageCode(str, Enum):
     English = "en"
@@ -75,14 +78,15 @@ class LanguageCode(str, Enum):
     Yoruba = "yo"
     Zulu = "zu"
 
+
 class WordCloud(BaseModel):
     text: str
-    format: str = 'png'
+    format: str = "png"
     width: int = 1000
     height: int = 1000
-    backgroundColor: str = 'transparent'
-    fontFamily: str = 'serif'
-    fontWeight: str = 'normal'
+    backgroundColor: str = "transparent"
+    fontFamily: str = "serif"
+    fontWeight: str = "normal"
     fontScale: int = 15
     scale: ScaleType = ScaleType.linear
     padding: int = 1
@@ -96,6 +100,7 @@ class WordCloud(BaseModel):
     language: LanguageCode = LanguageCode.English
     useWordList: bool = True
 
+
 class WordCloudRequest(BaseModel):
     text: str
     width: Optional[int] = None
@@ -103,7 +108,7 @@ class WordCloudRequest(BaseModel):
     backgroundColor: Optional[str] = None
     fontFamily: Optional[str] = None
     fontWeight: Optional[str] = None
-    fontScale:  Optional[int] = None
+    fontScale: Optional[int] = None
     padding: Optional[int] = None
     rotation: Optional[int] = None
     maxNumWords: Optional[int] = None
@@ -134,7 +139,7 @@ class WordCloudRequest(BaseModel):
                 "colors": ["#FF5733", "#33FF57", "#3357FF"],
                 "removeStopwords": False,
                 "cleanWords": True,
-                "language": LanguageCode.English
+                "language": LanguageCode.English,
             }
         }
 
@@ -146,7 +151,7 @@ def create_word_cloud(request: WordCloudRequest) -> WordCloud:
     # Create a WordCloud object using the data from WordCloudRequest
     return WordCloud(
         text=request.text,
-        format='png',
+        format="png",
         width=request.width or default_word_cloud.width,
         height=request.height or default_word_cloud.height,
         backgroundColor=request.backgroundColor or default_word_cloud.backgroundColor,
@@ -160,8 +165,12 @@ def create_word_cloud(request: WordCloudRequest) -> WordCloud:
         minWordLength=request.minWordLength or default_word_cloud.minWordLength,
         case=request.case or default_word_cloud.case,
         colors=request.colors,
-        removeStopwords=request.removeStopwords if request.removeStopwords is not None else default_word_cloud.removeStopwords,
-        cleanWords=request.cleanWords if request.cleanWords is not None else default_word_cloud.cleanWords,
+        removeStopwords=request.removeStopwords
+        if request.removeStopwords is not None
+        else default_word_cloud.removeStopwords,
+        cleanWords=request.cleanWords
+        if request.cleanWords is not None
+        else default_word_cloud.cleanWords,
         language=request.language or default_word_cloud.language,
-        useWordList=True
+        useWordList=True,
     )

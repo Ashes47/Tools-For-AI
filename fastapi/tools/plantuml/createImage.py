@@ -36,7 +36,8 @@ async def createPlantUML(plantumlText, diagram):
 
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
-            output="Image Generated", imageURL=urlFor(f"{PLANTUML_IMAGE_DIR}/{diagramDirectory}/{id}.png")
+            output="Image Generated",
+            imageURL=urlFor(f"{PLANTUML_IMAGE_DIR}/{diagramDirectory}/{id}.png"),
         )
     except:
         return CommandResponse(

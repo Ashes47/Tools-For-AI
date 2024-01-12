@@ -8,9 +8,8 @@ from tools.urlBuilder import urlFor, staticURL
 
 
 async def createWordCloud(data: WordCloud) -> CommandResponse:
-
     try:
-        response = requests.post('https://quickchart.io/wordcloud', json=data.dict())
+        response = requests.post("https://quickchart.io/wordcloud", json=data.dict())
         if response.status_code == 200:
             print("Saving Image")
 
@@ -20,13 +19,14 @@ async def createWordCloud(data: WordCloud) -> CommandResponse:
             if not os.path.exists(path):
                 os.makedirs(path)
 
-            with open(f"{path}/{id}.png", 'wb') as f:
+            with open(f"{path}/{id}.png", "wb") as f:
                 f.write(response.content)
 
             return CommandResponse(
-                output="Image Generated", imageURL=urlFor(f"{WORDCLOUD_IMAGE_DIR}/{id}.png")
+                output="Image Generated",
+                imageURL=urlFor(f"{WORDCLOUD_IMAGE_DIR}/{id}.png"),
             )
-        
+
     except:
         return CommandResponse(
             output=f"Error generating wordcloud",

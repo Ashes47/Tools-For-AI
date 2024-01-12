@@ -63,7 +63,7 @@ class PythonREPL(BaseModel):
             try:
                 # Set default figure size
                 plt.figure(figsize=(10, 6))
-                
+
                 # Apply Seaborn configuration
                 if seaborn_config:
                     sns.set(**seaborn_config)
@@ -107,7 +107,9 @@ class PythonREPL(BaseModel):
         safe_modules = {name: name for name in SAFE_MODULES}
 
         with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(self.execute_code, command, safe_modules, seaborn_config)
+            future = executor.submit(
+                self.execute_code, command, safe_modules, seaborn_config
+            )
             try:
                 return future.result(timeout=10)
             except TimeoutError:

@@ -1,0 +1,19 @@
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: SSH into the remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ DROPLET_IP }}
+          username: ${{ SSH_USER }}
+          password: ${{ SSH_PASSWORD }}
+          script: |
+            cd custom-gpts
+            git pull origin main
+            docker-compose build
+            docker-compose up -d

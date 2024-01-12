@@ -6,5 +6,9 @@ class CommandResponse(BaseModel):
     imageURL: str
 
     class Config:
-        json_schema_extra = {"example": {"imageURL": "https://example.com/image.png",
-                                         "output": "Image Generated"}}
+        json_schema_extra = {
+            "example": {
+                "imageURL": "https://example.com/image.png",
+                "output": "Image Generated",
+            }
+        }

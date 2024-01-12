@@ -31,9 +31,10 @@ async def createMermaidDiagram(mermaidGraph, diagram):
 
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
-            output="Image Generated", imageURL=urlFor(f"{MERMAID_IMAGE_DIR}/{diagramDirectory}/{id}.png")
+            output="Image Generated",
+            imageURL=urlFor(f"{MERMAID_IMAGE_DIR}/{diagramDirectory}/{id}.png"),
         )
-    
+
     except:
         return CommandResponse(
             output=f"error: fix the code and try again",

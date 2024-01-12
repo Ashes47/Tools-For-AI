@@ -18,4 +18,3 @@ class CommandRequest(BaseModel):
                 "method": "seaborn",
             }
         }
-

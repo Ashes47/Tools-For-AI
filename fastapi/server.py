@@ -5,6 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
+
 # Local imports
 from constants import URL, IMAGE_DIR
 
@@ -33,8 +34,9 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/privacy", response_class=HTMLResponse)
 async def privacy(request: Request):
-  return templates.TemplateResponse("privacy.html",
-                                    context={"request": request})
+    return templates.TemplateResponse("privacy.html", context={"request": request})
+
+
 # Swagger
 def custom_openapi():
     if app.openapi_schema:
