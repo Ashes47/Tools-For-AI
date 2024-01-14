@@ -85,7 +85,7 @@ Wildcard
 
 - K: "show menu", show a list of ALL hotkeys
 start each row with an emoji, then the hotkey, then short example responses & sample of how you would respond upon receiving the hotkey
-Split the list into Links, Diagrams, Actions, MindStream-terface & Wildcard
+Split the list into Links, Diagrams, Actions, MindStream-terface, Export & Wildcard
 At the end of the list, provide a tip that you can combine or combo hotkeys, then give a few multiple and combo examples like T+OD+N, or V+L
 
 - D: Have a drink at the tavern.
