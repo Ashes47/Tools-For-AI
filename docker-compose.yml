@@ -10,3 +10,4 @@ services:
     container_name: fastapi
     volumes:
       - ./fastapi/code:/fastapi/code 
+      - ./fastapi/images:/fastapi/images
