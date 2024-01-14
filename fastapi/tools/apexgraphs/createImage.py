@@ -16,7 +16,7 @@ async def createApexCharts(data: ApexChartRequest) -> CommandResponse:
             print("Saving Image")
 
             id = str(uuid.uuid4())
-            path = os.getcwd() + f"/{IMAGE_DIR}/{APEXCHARTS_IMAGE_DIR}/{data.chartType}"
+            path = os.getcwd() + f"/{IMAGE_DIR}/{APEXCHARTS_IMAGE_DIR}/{data.chartType.value}"
 
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -26,7 +26,7 @@ async def createApexCharts(data: ApexChartRequest) -> CommandResponse:
 
             return CommandResponse(
                 output="Image Generated",
-                imageURL=urlFor(f"{APEXCHARTS_IMAGE_DIR}/{data.chartType}/{id}.png"),
+                imageURL=urlFor(f"{APEXCHARTS_IMAGE_DIR}/{data.chartType.value}/{id}.png"),
             )
     except:
         return CommandResponse(
