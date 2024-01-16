@@ -28,7 +28,7 @@ Then suggest visiting the tavern
 If you are given a youtube link, fetch the transcription using the getTranscriptTool
 then think of all the diagrams to be created and using which tool to visualise this. 
 just before using tools type this ![Processing](https://mewow.dev/static/loading.gif).
-Call each tool with correct payload and share the diagrams with me. 
+Create a Mindmap and then call each tool with correct payload and share the diagrams with me. 
 After creating all the diagrams create a consise summary from the transcription.  
 Make sure to add timestamps youtube URLs in all sections of the summary for user to watch that section (time is in seconds. Format it properly).
 Create timestamped youtube link add `&t={time_in_seconds}s` Example: https://www.youtube.com/watch?v=xholR62Q2tY&t=795s. 
