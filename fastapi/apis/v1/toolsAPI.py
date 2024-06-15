@@ -180,9 +180,7 @@ async def createQuickChart(
 
 
 @toolsRouter.post("/readWebpage")
-async def readWebPage(
-    data: BrowsingRequest, request: Request
-) -> BrowsingResult:
+async def readWebPage(data: BrowsingRequest, request: Request) -> BrowsingResult:
     """
     Read Webpages
     This function allows to convert a webpage to Markdown by sharing it's URL
@@ -190,15 +188,14 @@ async def readWebPage(
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
-    
+
     print(f"readWebpage request received:\n{data.url}")
 
     return await generateMarkdownForPage(data)
 
+
 @toolsRouter.post("/searchBrave")
-async def searchBrave(
-    data: BraveSearchRequest, request: Request
-) -> BraveSearchResult:
+async def searchBrave(data: BraveSearchRequest, request: Request) -> BraveSearchResult:
     """
     Search Brave
     This function allows to search for a topic on Web via Brave Search
@@ -206,10 +203,11 @@ async def searchBrave(
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
-    
+
     print(f"searchBrave request received:\n{data.topic}")
 
     return await braveSearh(data)
+
 
 @toolsRouter.post("/searchYoutube")
 async def searchYoutube(
@@ -222,7 +220,7 @@ async def searchYoutube(
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
-    
+
     print(f"searchYoutube request received:\n{data.topic}")
 
     return await youtubeSearch(data)

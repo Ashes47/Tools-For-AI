@@ -6,11 +6,7 @@ class YoutubeSearchRequest(BaseModel):
     topic: str
 
     class Config:
-        json_schema_extra = {
-            "example": {
-                "topic": "Quantum Computing"
-                }
-        }
+        json_schema_extra = {"example": {"topic": "Quantum Computing"}}
 
 
 class YoutubeSearchResult(BaseModel):
@@ -19,6 +15,9 @@ class YoutubeSearchResult(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "links": ['https://www.youtube.com/watch?v=g_IaVepNDT4&pp=ygURUXVhbnR1bSBDb21wdXRpbmc%3D', 'https://www.youtube.com/watch?v=QuR969uMICM&pp=ygURUXVhbnR1bSBDb21wdXRpbmc%3D']
-                }
+                "links": [
+                    "https://www.youtube.com/watch?v=g_IaVepNDT4&pp=ygURUXVhbnR1bSBDb21wdXRpbmc%3D",
+                    "https://www.youtube.com/watch?v=QuR969uMICM&pp=ygURUXVhbnR1bSBDb21wdXRpbmc%3D",
+                ]
+            }
         }

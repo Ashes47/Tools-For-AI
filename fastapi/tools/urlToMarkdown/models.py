@@ -7,9 +7,7 @@ class BrowsingRequest(BaseModel):
 
     class Config:
         json_schema_extra = {
-            "example": {
-                "url": "https://en.wikipedia.org/wiki/Adolf_Hitler"
-                }
+            "example": {"url": "https://en.wikipedia.org/wiki/Adolf_Hitler"}
         }
 
 
@@ -18,7 +16,5 @@ class BrowsingResult(BaseModel):
 
     class Config:
         json_schema_extra = {
-            "example": {
-                "response": "Adolf Hilter wiki page in Markdown format"
-                }
+            "example": {"response": "Adolf Hilter wiki page in Markdown format"}
         }
