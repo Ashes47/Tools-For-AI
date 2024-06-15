@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Request
 from auth import validateToken
+from tools.searchYoutube.models import YoutubeSearchRequest, YoutubeSearchResult
+from tools.searchYoutube.youtubeSearch import youtubeSearch
+from tools.braveSearch.models import BraveSearchRequest, BraveSearchResult
+from tools.braveSearch.braveSearch import braveSearh
 from tools.urlToMarkdown.generateMarkdown import generateMarkdownForPage
 from tools.urlToMarkdown.models import BrowsingRequest, BrowsingResult
 from tools.youtube.models import Transcription, TranscriptionResponse
@@ -181,7 +185,7 @@ async def readWebPage(
 ) -> BrowsingResult:
     """
     Read Webpages
-    This function allows to read a webpage by sharing it's URL
+    This function allows to convert a webpage to Markdown by sharing it's URL
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
@@ -190,3 +194,35 @@ async def readWebPage(
     print(f"readWebpage request received:\n{data.url}")
 
     return await generateMarkdownForPage(data)
+
+@toolsRouter.post("/searchBrave")
+async def searchBrave(
+    data: BraveSearchRequest, request: Request
+) -> BraveSearchResult:
+    """
+    Search Brave
+    This function allows to search for a topic on Web via Brave Search
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+    
+    print(f"searchBrave request received:\n{data.topic}")
+
+    return await braveSearh(data)
+
+@toolsRouter.post("/searchYoutube")
+async def searchYoutube(
+    data: YoutubeSearchRequest, request: Request
+) -> YoutubeSearchResult:
+    """
+    Search Youtube
+    This function allows to search for a topic on Youtube
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+    
+    print(f"searchYoutube request received:\n{data.topic}")
+
+    return await youtubeSearch(data)

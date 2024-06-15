@@ -19,6 +19,6 @@ class BrowsingResult(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "response": ""
+                "response": "Adolf Hilter wiki page in Markdown format"
                 }
         }
