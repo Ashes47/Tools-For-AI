@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Request
 from auth import validateToken
+from tools.urlToMarkdown.generateMarkdown import generateMarkdownForPage
+from tools.urlToMarkdown.models import BrowsingRequest, BrowsingResult
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
 from tools.mermaid.models import Mermaid
@@ -161,7 +163,7 @@ async def createQuickChart(
 ) -> CommandResponse:
     """
     Create QuickChart
-    This function chart in text with width and height and background color and creates a QuickChart.
+    This function takes in parameters: text with width and height and background color and creates a QuickChart.
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
@@ -171,3 +173,20 @@ async def createQuickChart(
     storeCodeAsFile(data.chart, f"quickcharts")
 
     return await createQuickCharts(data)
+
+
+@toolsRouter.post("/readWebpage")
+async def readWebPage(
+    data: BrowsingRequest, request: Request
+) -> BrowsingResult:
+    """
+    Read Webpages
+    This function allows to read a webpage by sharing it's URL
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+    
+    print(f"readWebpage request received:\n{data.url}")
+
+    return await generateMarkdownForPage(data)

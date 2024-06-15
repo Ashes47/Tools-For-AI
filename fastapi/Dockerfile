@@ -7,6 +7,7 @@ COPY requirements.txt /fastapi
 WORKDIR /fastapi
 
 RUN pip3 install -r requirements.txt
+RUN pip3 install markdownify
 
 COPY . /fastapi
 
