@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  lint-and-build:
+  format-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: format-and-build
 
     steps:
       - name: Checkout code

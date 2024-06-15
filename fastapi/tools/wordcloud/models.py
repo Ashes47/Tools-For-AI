@@ -165,12 +165,16 @@ def create_word_cloud(request: WordCloudRequest) -> WordCloud:
         minWordLength=request.minWordLength or default_word_cloud.minWordLength,
         case=request.case or default_word_cloud.case,
         colors=request.colors,
-        removeStopwords=request.removeStopwords
-        if request.removeStopwords is not None
-        else default_word_cloud.removeStopwords,
-        cleanWords=request.cleanWords
-        if request.cleanWords is not None
-        else default_word_cloud.cleanWords,
+        removeStopwords=(
+            request.removeStopwords
+            if request.removeStopwords is not None
+            else default_word_cloud.removeStopwords
+        ),
+        cleanWords=(
+            request.cleanWords
+            if request.cleanWords is not None
+            else default_word_cloud.cleanWords
+        ),
         language=request.language or default_word_cloud.language,
         useWordList=True,
     )
