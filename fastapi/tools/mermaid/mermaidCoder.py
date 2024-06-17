@@ -7,6 +7,7 @@ from tools.mermaid.createImage import createMermaidDiagram
 import g4f
 from retry import retry
 
+
 def generateMermaidCode(data: SmartMermaid):
     try:
         match (data.diagram):
@@ -64,7 +65,11 @@ def getCode(text: str, prompt: str, diagram_type: str, existing_code: str = None
         temperature=0.24,
         messages=[
             {"role": "system", "content": prompt},
-            {"role": "user", "content": userPrompt + f" pydantic response schema: {LLMResult.model_json_schema()}"},
+            {
+                "role": "user",
+                "content": userPrompt
+                + f" pydantic response schema: {LLMResult.model_json_schema()}",
+            },
         ],
         response_format={"type": "json_object"},
     )
@@ -74,18 +79,20 @@ def getCode(text: str, prompt: str, diagram_type: str, existing_code: str = None
     print(f"For {diagram_type} diagram, code: {code['code']}")
     return createMermaidDiagram(code["code"], diagram_type)
 
+
 def remove_json_indentation(json_string):
-  """
-  Removes indentation and extra spaces from a JSON string.
+    """
+    Removes indentation and extra spaces from a JSON string.
 
-  Args:
-      json_string: The string containing the potentially indented JSON data.
+    Args:
+        json_string: The string containing the potentially indented JSON data.
 
-  Returns:
-      A string with indentation and extra spaces removed, suitable for JSON parsing.
-  """
-  lines = json_string.splitlines()  # Split into lines
-  filtered_lines = [line.strip() for line in lines]  # Remove leading/trailing whitespace
-  filtered_json = ''.join(filtered_lines)  # Join lines back into a single string
-  return filtered_json
-    
+    Returns:
+        A string with indentation and extra spaces removed, suitable for JSON parsing.
+    """
+    lines = json_string.splitlines()  # Split into lines
+    filtered_lines = [
+        line.strip() for line in lines
+    ]  # Remove leading/trailing whitespace
+    filtered_json = "".join(filtered_lines)  # Join lines back into a single string
+    return filtered_json

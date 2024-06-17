@@ -49,5 +49,6 @@ class SmartMermaid(BaseModel):
             }
         }
 
+
 class LLMResult(BaseModel):
     code: str
