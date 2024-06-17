@@ -10,7 +10,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createMermaidDiagram(mermaidGraph, diagram):
+def createMermaidDiagram(mermaidGraph, diagram):
     try:
         graphbytes = mermaidGraph.encode("ascii")
 

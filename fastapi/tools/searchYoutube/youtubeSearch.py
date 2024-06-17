@@ -4,7 +4,7 @@ import ast
 import os
 
 
-async def youtubeSearch(data: YoutubeSearchRequest) -> YoutubeSearchResult:
+def youtubeSearch(data: YoutubeSearchRequest) -> YoutubeSearchResult:
     try:
         tool = YouTubeSearchTool()
         response = tool.run(data.topic)

@@ -16,9 +16,11 @@ black
 
 # Youtube Search
 youtube_search
+minify_html
 
 # Language Community Resources
 langchain-community
+unstructured
 
 # Utilities
 plantuml

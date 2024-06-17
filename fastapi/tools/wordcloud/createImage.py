@@ -7,7 +7,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createWordCloud(data: WordCloud) -> CommandResponse:
+def createWordCloud(data: WordCloud) -> CommandResponse:
     try:
         response = requests.post("https://quickchart.io/wordcloud", json=data.dict())
         if response.status_code == 200:

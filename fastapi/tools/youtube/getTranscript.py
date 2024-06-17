@@ -56,7 +56,7 @@ def makeSlots(transcription) -> TranscriptionResponse:
     return result
 
 
-async def getTranscription(transcription: Transcription) -> TranscriptionResponse:
+def getTranscription(transcription: Transcription) -> TranscriptionResponse:
     videoId = getVideoId(transcription.url)
     transcription = YouTubeTranscriptApi.get_transcript(
         video_id=videoId, languages=[transcription.language.value]

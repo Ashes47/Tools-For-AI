@@ -7,7 +7,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createGraphViz(data: GraphvizRequest) -> CommandResponse:
+def createGraphViz(data: GraphvizRequest) -> CommandResponse:
     try:
         response = requests.post(
             "https://quickchart.io/graphviz",

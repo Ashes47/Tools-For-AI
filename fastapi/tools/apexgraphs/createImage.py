@@ -7,7 +7,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createApexCharts(data: ApexChartRequest) -> CommandResponse:
+def createApexCharts(data: ApexChartRequest) -> CommandResponse:
     try:
         response = requests.get(
             "https://quickchart.io/apex-charts/render", params=data.dict()

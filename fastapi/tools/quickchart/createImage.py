@@ -7,7 +7,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createQuickCharts(data: QuickChartRequest) -> CommandResponse:
+def createQuickCharts(data: QuickChartRequest) -> CommandResponse:
     try:
         response = requests.get(
             "https://quickchart.io/chart",

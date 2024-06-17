@@ -9,7 +9,7 @@ from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def createPlantUML(plantumlText, diagram):
+def createPlantUML(plantumlText, diagram):
     try:
         # create a server object to call for your computations
         print("Calling PlantUML Server")

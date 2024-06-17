@@ -8,7 +8,7 @@ from constants import IMAGE_DIR
 from tools.urlBuilder import urlFor, staticURL
 
 
-async def execute_command(command: CommandRequest, seaborn_config=None):
+def execute_command(command: CommandRequest, seaborn_config=None):
     repl = PythonREPL()
     repl.globals.update(
         {"matplotlib": __import__("matplotlib"), "seaborn": __import__("seaborn")}

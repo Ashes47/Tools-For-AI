@@ -4,7 +4,7 @@ import ast
 import os
 
 
-async def braveSearh(data: BraveSearchRequest) -> BraveSearchResult:
+def braveSearh(data: BraveSearchRequest) -> BraveSearchResult:
     try:
         tool = BraveSearch.from_api_key(
             api_key=os.environ["BraveAPIKEY"], search_kwargs={"count": 4}

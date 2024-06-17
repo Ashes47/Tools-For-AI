@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Request
 from auth import validateToken
+from tools.deepReadURL.models import DeepBrowsingResult
+from tools.deepReadURL.generateMarkdown import deepSearchForPage
 from tools.searchYoutube.models import YoutubeSearchRequest, YoutubeSearchResult
 from tools.searchYoutube.youtubeSearch import youtubeSearch
 from tools.braveSearch.models import BraveSearchRequest, BraveSearchResult
 from tools.braveSearch.braveSearch import braveSearh
-from tools.urlToMarkdown.generateMarkdown import generateMarkdownForPage
-from tools.urlToMarkdown.models import BrowsingRequest, BrowsingResult
+from tools.readURL.generateMarkdown import generateMarkdownForPage
+from tools.readURL.models import BrowsingResult
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
 from tools.mermaid.models import Mermaid
@@ -13,7 +15,7 @@ from tools.mermaid.createImage import createMermaidDiagram
 from tools.plantuml.models import PlantUML
 from tools.plantuml.createImage import createPlantUML
 from tools.pythonShell.models import CommandRequest
-from tools.models import CommandResponse
+from tools.models import CommandResponse, BrowsingRequest
 from tools.pythonShell.createImage import execute_command
 from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
@@ -24,6 +26,7 @@ from tools.graphviz.createImage import createGraphViz
 from tools.quickchart.createImage import createQuickCharts
 from tools.quickchart.models import QuickChartRequest
 from store.saveCode import storeCodeAsFile
+from tools.threadingUtils import run_in_threadpool
 
 toolsRouter = APIRouter(prefix="/tool")
 
@@ -39,7 +42,7 @@ async def getTranscript(data: Transcription, request: Request) -> TranscriptionR
 
     print(f"URL: {data.url}\nFetching transcription")
 
-    transcript = await getTranscription(data)
+    transcript = await run_in_threadpool(getTranscription, data)
     return TranscriptionResponse(transcript=transcript)
 
 
@@ -57,7 +60,7 @@ async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
     print(f"Mermaid Text Recieved : {data.diagram}")
     storeCodeAsFile(data.mermaidText, f"mermaid/{data.diagram.value}")
 
-    return await createMermaidDiagram(data.mermaidText, data.diagram)
+    return await run_in_threadpool(createMermaidDiagram, data.mermaidText, data.diagram)
 
 
 # Create a Plantuml Diagram from text
@@ -74,7 +77,7 @@ async def createPlantuml(data: PlantUML, request: Request) -> CommandResponse:
     print(f"Plantuml Text Recieved : {data.diagram}")
     storeCodeAsFile(data.plantumlText, f"plantuml/{data.diagram.value}")
 
-    return await createPlantUML(data.plantumlText, data.diagram)
+    return await run_in_threadpool(createPlantUML, data.plantumlText, data.diagram)
 
 
 # Create a Matplotlib Diagram from text
@@ -89,7 +92,7 @@ async def createMatplotlib(data: CommandRequest, request: Request) -> CommandRes
 
     print(f"Python Code Recieved:\n{data.code}")
 
-    return await execute_command(data)
+    return await run_in_threadpool(execute_command, data)
 
 
 # Create a Seaborn Diagram from text
@@ -111,7 +114,7 @@ async def createSeaborn(data: CommandRequest, request: Request) -> CommandRespon
 
     print(f"Python Code Recieved:\n{data.code}")
 
-    return await execute_command(data, seaborn_config)
+    return await run_in_threadpool(execute_command, data, seaborn_config)
 
 
 @toolsRouter.post("/createWordcloud")
@@ -127,7 +130,7 @@ async def createWordcloud(data: WordCloudRequest, request: Request) -> CommandRe
 
     print(f"Wordcloud request received:\n{data.text}")
 
-    return await createWordCloud(create_word_cloud(data))
+    return await run_in_threadpool(createWordCloud, create_word_cloud(data))
 
 
 @toolsRouter.post("/createApexcharts")
@@ -143,7 +146,7 @@ async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandR
     print(f"Apexcharts request received:\n{data.config}")
     storeCodeAsFile(data.config, f"apexcharts")
 
-    return await createApexCharts(data)
+    return await run_in_threadpool(createApexCharts, data)
 
 
 @toolsRouter.post("/createGraphviz")
@@ -158,7 +161,7 @@ async def createGraphviz(data: GraphvizRequest, request: Request) -> CommandResp
     print(f"Graphviz request received:\n{data.graph}")
     storeCodeAsFile(data.graph, f"graphviz")
 
-    return await createGraphViz(data)
+    return await run_in_threadpool(createGraphViz, data)
 
 
 @toolsRouter.post("/createQuickChart")
@@ -176,7 +179,7 @@ async def createQuickChart(
     print(f"QuickChart request received:\n{data.chart}")
     storeCodeAsFile(data.chart, f"quickcharts")
 
-    return await createQuickCharts(data)
+    return await run_in_threadpool(createQuickCharts, data)
 
 
 @toolsRouter.post("/readWebpage")
@@ -191,7 +194,21 @@ async def readWebPage(data: BrowsingRequest, request: Request) -> BrowsingResult
 
     print(f"readWebpage request received:\n{data.url}")
 
-    return await generateMarkdownForPage(data)
+    return await run_in_threadpool(generateMarkdownForPage, data)
+
+@toolsRouter.post("/deepReadWebpage")
+def deepReadWebPage(data: BrowsingRequest, request: Request) -> DeepBrowsingResult:
+    """
+    Deep Read Webpages
+    This function allows you to navigate to the links within the input webpage and return information from all the links found + the original webpage.
+    """
+    token = request.headers["Authorization"]
+    if not validateToken(token):
+        raise Exception("Invalid Token")
+    
+    print(f"deepReadWebpage request received:\n{data.url}")
+
+    return deepSearchForPage(data)
 
 
 @toolsRouter.post("/searchBrave")
@@ -206,7 +223,7 @@ async def searchBrave(data: BraveSearchRequest, request: Request) -> BraveSearch
 
     print(f"searchBrave request received:\n{data.topic}")
 
-    return await braveSearh(data)
+    return await run_in_threadpool(braveSearh, data)
 
 
 @toolsRouter.post("/searchYoutube")
@@ -223,4 +240,4 @@ async def searchYoutube(
 
     print(f"searchYoutube request received:\n{data.topic}")
 
-    return await youtubeSearch(data)
+    return await run_in_threadpool(youtubeSearch, data)
