@@ -14,13 +14,11 @@ pillow
 # Lint
 black
 
-# Youtube Search
-youtube_search
-minify_html
 
 # Language Community Resources
 langchain-community
 unstructured
+minify_html
 
 # Utilities
 plantuml

@@ -42,11 +42,11 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="Youtube to Mindmap",
+        title="Tools API",
         version="1.0.0",
-        description="API for converting youtube videos to transcript and creating mindmaps",
+        description="Multiple APIs to empower AI Agents",
         routes=app.routes,
-        servers=[{"url": URL, "description": "Youtube to Mindmap"}],
+        servers=[{"url": URL, "description": "Multiple APIs to empower AI Agents"}],
     )
     openapi_schema["info"]["x-logo"] = {"url": URL + "/static/logo.png"}
     app.openapi_schema = openapi_schema

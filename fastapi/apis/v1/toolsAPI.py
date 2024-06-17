@@ -2,11 +2,9 @@ from fastapi import APIRouter, Request
 from auth import validateToken
 from tools.deepReadURL.models import DeepBrowsingResult
 from tools.deepReadURL.generateMarkdown import deepSearchForPage
-from tools.searchYoutube.models import YoutubeSearchRequest, YoutubeSearchResult
-from tools.searchYoutube.youtubeSearch import youtubeSearch
-from tools.braveSearch.models import BraveSearchRequest, BraveSearchResult
-from tools.braveSearch.braveSearch import braveSearh
 from tools.readURL.generateMarkdown import generateMarkdownForPage
+from tools.searchWeb.models import SearchParams, SearchResponse
+from tools.searchWeb.searchWeb import search
 from tools.readURL.models import BrowsingResult
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
@@ -196,6 +194,7 @@ async def readWebPage(data: BrowsingRequest, request: Request) -> BrowsingResult
 
     return await run_in_threadpool(generateMarkdownForPage, data)
 
+
 @toolsRouter.post("/deepReadWebpage")
 def deepReadWebPage(data: BrowsingRequest, request: Request) -> DeepBrowsingResult:
     """
@@ -205,39 +204,28 @@ def deepReadWebPage(data: BrowsingRequest, request: Request) -> DeepBrowsingResu
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
-    
+
     print(f"deepReadWebpage request received:\n{data.url}")
 
     return deepSearchForPage(data)
 
 
-@toolsRouter.post("/searchBrave")
-async def searchBrave(data: BraveSearchRequest, request: Request) -> BraveSearchResult:
+@toolsRouter.post("/searchWeb")
+async def searchWeb(data: SearchParams, request: Request) -> SearchResponse:
     """
-    Search Brave
-    This function allows to search for a topic on Web via Brave Search
-    """
-    token = request.headers["Authorization"]
-    if not validateToken(token):
-        raise Exception("Invalid Token")
+    Executes a search query using the specified parameters and returns the results.
 
-    print(f"searchBrave request received:\n{data.topic}")
+    Parameters:
+    params (SearchParams): The search parameters including query, engines and other options.
 
-    return await run_in_threadpool(braveSearh, data)
+    Returns:
+    SearchResponse: A response object containing the query, answers, and filtered search results.
 
-
-@toolsRouter.post("/searchYoutube")
-async def searchYoutube(
-    data: YoutubeSearchRequest, request: Request
-) -> YoutubeSearchResult:
-    """
-    Search Youtube
-    This function allows to search for a topic on Youtube
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
         raise Exception("Invalid Token")
 
-    print(f"searchYoutube request received:\n{data.topic}")
+    print(f"searchWeb request received:\n{data.query}")
 
-    return await run_in_threadpool(youtubeSearch, data)
+    return await run_in_threadpool(search, data)

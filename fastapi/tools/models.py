@@ -13,6 +13,7 @@ class CommandResponse(BaseModel):
             }
         }
 
+
 class BrowsingRequest(BaseModel):
     url: str
 
