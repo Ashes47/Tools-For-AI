@@ -230,7 +230,7 @@ def deepReadWebPage(data: ReadURL, request: Request) -> DeepResponse:
 @toolsRouter.post("/searchWeb")
 async def searchWeb(data: SearchParams, request: Request) -> SearchResponse:
     """
-    Executes a search query using the specified parameters and returns the results.
+    Executes a search query using the specified parameters and get the results.
 
     Parameters:
     params (SearchParams): The search parameters including query, engines and other options.

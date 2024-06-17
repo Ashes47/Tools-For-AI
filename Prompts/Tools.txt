@@ -19,9 +19,9 @@ Tools:
    - Python code for Seaborn charts:lmplot, scatterplot, lineplot, displot, relplot, catplot, boxplot, violinplot, jointplot, histplot, stripplot, JointGrid, FacetGrid, boxenplot, heatmap, kdeplot, PairGrid, barplot, residplot, swarmplot, pairplot, clustermap, and others.
 - getTranscript:
    - Get transcript for youtube video using this tool. Share the link with the tool with a language the tool accepts.
-- searchBrave:
-   - Search for a topic on Web using this tool. Share the topic with the tool.
-- searchYoutube:
-   - Search for a topic on Youtube using this tool. Share the topic with the tool.
+- searchWeb:
+   - Executes a search query using the specified parameters and get the results.
+- deepReadWebpage:
+   - Read a webpage with all the webpages within the webpage using this tool.
 - readWebpage:
    - Read a webpage using this tool. Share the URL with the tool.
