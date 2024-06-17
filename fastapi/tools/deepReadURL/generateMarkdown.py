@@ -3,6 +3,7 @@ from tools.models import ReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
 import concurrent.futures
+from tools.searchWeb.utils import process_search_results
 
 
 def deepSearchForPage(data: ReadURL) -> DeepResponse:
@@ -14,6 +15,9 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
         title, minimized_body, link_urls, image_urls = cleanup_html(
             response.text, source
         )
+        if data.summarize:
+            minimized_body = process_search_results(None, minimized_body)
+
         limit_pages = data.limit - 1
         link_urls = list(set(link_urls))
         if len(link_urls) > limit_pages:
@@ -30,6 +34,9 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
                 title, minimized_body, link_urls, image_urls = cleanup_html(
                     response.text, link
                 )
+                if data.summarize:
+                    minimized_body = process_search_results(None, minimized_body)
+
                 content = f"Title: {title}, Body: {minimized_body}, Links: {link_urls}, Images: {image_urls}"
                 return (link, content)
             except Exception as e:

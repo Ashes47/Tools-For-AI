@@ -55,10 +55,16 @@ def search(params: SearchParams):
             search_results = []
             for res in limited_results:
                 print(f"Parsing {res['url']}")
-                parsed_content = generateMarkdownForPage(ReadURL(url=res["url"])).response
-                if params.summarize and not parsed_content.startswith("Error reading Webpage: "):
+                parsed_content = generateMarkdownForPage(
+                    ReadURL(url=res["url"])
+                ).response
+                if params.summarize and not parsed_content.startswith(
+                    "Error reading Webpage: "
+                ):
                     print(f"Summarizing {res['url']}")
-                    summarized_content = process_search_results(params.query, parsed_content)
+                    summarized_content = process_search_results(
+                        params.query, parsed_content
+                    )
                     parsed_content = summarized_content
 
                 search_results.append(
@@ -68,7 +74,7 @@ def search(params: SearchParams):
                         description=res["content"],
                         score=res.get("score"),
                         category=res.get("category"),
-                        content=parsed_content
+                        content=parsed_content,
                     )
                 )
         else:
@@ -79,7 +85,7 @@ def search(params: SearchParams):
                     description=res["content"],
                     score=res.get("score"),
                     category=res.get("category"),
-                    content="Set crawl to true to fetch the content of the search results."
+                    content="Set crawl to true to fetch the content of the search results.",
                 )
                 for res in limited_results
             ]

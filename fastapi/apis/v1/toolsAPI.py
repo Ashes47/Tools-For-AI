@@ -185,6 +185,7 @@ async def readWebPage(data: ReadURL, request: Request) -> ContentURL:
     """
     Read Webpages
     This function allows to convert a webpage to Markdown by sharing it's URL
+    use summarize (bool): Whether to summarize the content of the search results.
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
@@ -200,6 +201,7 @@ def deepReadWebPage(data: ReadURL, request: Request) -> DeepResponse:
     """
     Deep Read Webpages
     This function allows you to navigate to the links within the input webpage and return information from all the links found + the original webpage.
+    use summarize (bool): Whether to summarize the content of the search results.
     """
     token = request.headers["Authorization"]
     if not validateToken(token):
@@ -218,6 +220,7 @@ async def searchWeb(data: SearchParams, request: Request) -> SearchResponse:
     Parameters:
     params (SearchParams): The search parameters including query, engines and other options.
     use crawl (bool): Whether to use the crawler to fetch the content of the search results.
+    use summarize (bool): Whether to summarize the content of the search results.
 
     Returns:
     SearchResponse: A response object containing the query, answers, and filtered search results.

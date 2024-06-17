@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict
 from enum import Enum
@@ -47,9 +46,7 @@ class SearchParams(BaseModel):
         description="The category to search within.",
         pattern="^(general|images|news|videos|map|science|music|files|it|social media|economy)$",
     )
-    crawl: Optional[bool] = Field(
-        False, description="Crawl the webpage for content"
-    )
+    crawl: Optional[bool] = Field(False, description="Crawl the webpage for content")
     summarize: Optional[bool] = Field(
         False, description="Summarize the webpage content"
     )
@@ -84,13 +81,13 @@ class SearchParams(BaseModel):
         None, description="Redirect to the first search result if available."
     )
 
-    @field_validator('summarize')
+    @field_validator("summarize")
     @classmethod
     def check_summarize_condition(cls, value, values):
-        if value and not values.data.get('crawl', False):
+        if value and not values.data.get("crawl", False):
             raise ValueError("summarize can only be true if crawl is true")
         return value
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -212,6 +209,7 @@ class SearchResult(BaseModel):
     score: Optional[float] = None
     category: Optional[str] = None
     content: Optional[str] = None
+
 
 class SearchResponse(BaseModel):
     query: str
