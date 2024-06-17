@@ -31,44 +31,44 @@ Welcome to the **Tools API** project! This repository contains the source code a
 
 1. Clone the repository:
 
-    \```sh
+    ```sh
     git clone https://github.com/your-username/tools-api.git
     cd tools-api
-    \```
+    ```
 
 2. Create and activate a virtual environment:
 
-    \```sh
+    ```sh
     python -m venv venv
     source venv/bin/activate
-    \```
+    ```
 
 3. Install the dependencies:
 
-    \```sh
+    ```sh
     pip install -r requirements.txt
-    \```
+    ```
 
 4. Run the FastAPI server:
 
-    \```sh
+    ```sh
     uvicorn server:app --host 0.0.0.0 --port 8000 --workers -1
-    \```
+    ```
 
 ### Using Docker
 
 1. Clone the repository:
 
-    \```sh
+    ```sh
     git clone https://github.com/your-username/tools-api.git
     cd tools-api
-    \```
+    ```
 
 2. Build and start the services using Docker Compose:
 
-    \```sh
+    ```sh
     docker-compose up --build
-    \```
+    ```
 
 3. The API will be accessible at `http://localhost:8000`.
 
@@ -76,14 +76,14 @@ Welcome to the **Tools API** project! This repository contains the source code a
 
 Create a `.env` file in the root directory of the project with the following variables:
 
-\```env
+```env
 token=
 URL=
 SEARCH_ENGINE_URL=
 SEARCH_ENGINE_USERNAME=
 SEARCH_ENGINE_PASSWORD=
 USER_AGENT=
-\```
+```
 
 ### API Documentation
 
