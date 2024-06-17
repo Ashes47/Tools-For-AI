@@ -5,16 +5,7 @@ import requests
 
 
 async def generateMarkdownForPage(data: BrowsingRequest) -> BrowsingResult:
-    try:
-        print(f"Usina Jina to convert webpage to markdown")
-        return BrowsingResult(
-            response=requests.get("https://r.jina.ai/" + data.url).text
-        )
-    except Exception:
         try:
-            print(
-                "Jina is rate limited, Using Langchain to convert webpage to markdown"
-            )
             loader = AsyncHtmlLoader([data.url])
             docs = loader.load()
 
