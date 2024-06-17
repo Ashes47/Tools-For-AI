@@ -14,10 +14,11 @@ class CommandResponse(BaseModel):
         }
 
 
-class BrowsingRequest(BaseModel):
+class ReadURL(BaseModel):
     url: str
+    limit: int = 10
 
     class Config:
         json_schema_extra = {
-            "example": {"url": "https://en.wikipedia.org/wiki/Adolf_Hitler"}
+            "example": {"url": "https://en.wikipedia.org/wiki/Adolf_Hitler", "limit": 10}
         }

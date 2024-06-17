@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
+
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict
 from enum import Enum
+
 
 class SearchEngines(str, Enum):
     google = "google"
@@ -10,6 +12,7 @@ class SearchEngines(str, Enum):
     github = "github"
     arxiv = "arxiv"
     pubmed = "pubmed"
+    youtube = "youtube"
 
 
 class SafeSearch(str, Enum):
@@ -44,6 +47,12 @@ class SearchParams(BaseModel):
         description="The category to search within.",
         pattern="^(general|images|news|videos|map|science|music|files|it|social media|economy)$",
     )
+    crawl: Optional[bool] = Field(
+        False, description="Crawl the webpage for content"
+    )
+    summarize: Optional[bool] = Field(
+        False, description="Summarize the webpage content"
+    )
     language: Optional[str] = Field(
         None, description="The language for the search results. E.g., 'en', 'fr', etc."
     )
@@ -75,8 +84,15 @@ class SearchParams(BaseModel):
         None, description="Redirect to the first search result if available."
     )
 
+    @field_validator('summarize')
+    @classmethod
+    def check_summarize_condition(cls, value, values):
+        if value and not values.data.get('crawl', False):
+            raise ValueError("summarize can only be true if crawl is true")
+        return value
+    
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "query": "quantum computing",
                 "categories": "general",
@@ -133,7 +149,7 @@ class SearchQuery:
 
         self.locale = None
         if self.lang:
-            self.locale = self.lang.replace('_', '-')
+            self.locale = self.lang.replace("_", "-")
 
     @property
     def categories(self):
@@ -192,10 +208,10 @@ class SearchQuery:
 class SearchResult(BaseModel):
     url: str
     title: str
-    content: str
+    description: str
     score: Optional[float] = None
     category: Optional[str] = None
-
+    content: Optional[str] = None
 
 class SearchResponse(BaseModel):
     query: str

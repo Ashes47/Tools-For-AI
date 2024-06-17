@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Request
 from auth import validateToken
-from tools.deepReadURL.models import DeepBrowsingResult
+from tools.deepReadURL.models import DeepResponse
 from tools.deepReadURL.generateMarkdown import deepSearchForPage
 from tools.readURL.generateMarkdown import generateMarkdownForPage
 from tools.searchWeb.models import SearchParams, SearchResponse
 from tools.searchWeb.searchWeb import search
-from tools.readURL.models import BrowsingResult
+from tools.readURL.models import ContentURL
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
 from tools.mermaid.models import Mermaid
@@ -13,7 +13,7 @@ from tools.mermaid.createImage import createMermaidDiagram
 from tools.plantuml.models import PlantUML
 from tools.plantuml.createImage import createPlantUML
 from tools.pythonShell.models import CommandRequest
-from tools.models import CommandResponse, BrowsingRequest
+from tools.models import CommandResponse, ReadURL
 from tools.pythonShell.createImage import execute_command
 from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
@@ -181,7 +181,7 @@ async def createQuickChart(
 
 
 @toolsRouter.post("/readWebpage")
-async def readWebPage(data: BrowsingRequest, request: Request) -> BrowsingResult:
+async def readWebPage(data: ReadURL, request: Request) -> ContentURL:
     """
     Read Webpages
     This function allows to convert a webpage to Markdown by sharing it's URL
@@ -196,7 +196,7 @@ async def readWebPage(data: BrowsingRequest, request: Request) -> BrowsingResult
 
 
 @toolsRouter.post("/deepReadWebpage")
-def deepReadWebPage(data: BrowsingRequest, request: Request) -> DeepBrowsingResult:
+def deepReadWebPage(data: ReadURL, request: Request) -> DeepResponse:
     """
     Deep Read Webpages
     This function allows you to navigate to the links within the input webpage and return information from all the links found + the original webpage.
@@ -217,6 +217,7 @@ async def searchWeb(data: SearchParams, request: Request) -> SearchResponse:
 
     Parameters:
     params (SearchParams): The search parameters including query, engines and other options.
+    use crawl (bool): Whether to use the crawler to fetch the content of the search results.
 
     Returns:
     SearchResponse: A response object containing the query, answers, and filtered search results.

@@ -1,11 +1,11 @@
-from tools.deepReadURL.models import DeepBrowsingResult
-from tools.models import BrowsingRequest
+from tools.deepReadURL.models import DeepResponse
+from tools.models import ReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
 import concurrent.futures
 
 
-def deepSearchForPage(data: BrowsingRequest) -> DeepBrowsingResult:
+def deepSearchForPage(data: ReadURL) -> DeepResponse:
     try:
         urls = []
         information = []
@@ -14,7 +14,10 @@ def deepSearchForPage(data: BrowsingRequest) -> DeepBrowsingResult:
         title, minimized_body, link_urls, image_urls = cleanup_html(
             response.text, source
         )
-        link_urls = link_urls[:20]
+        limit_pages = data.limit - 1
+        link_urls = list(set(link_urls))
+        if len(link_urls) > limit_pages:
+            link_urls = link_urls[:limit_pages]
         content = f"Title: {title}, Body: {minimized_body}, Links: {link_urls}, Images: {image_urls}"
 
         urls.append(source)
@@ -42,7 +45,7 @@ def deepSearchForPage(data: BrowsingRequest) -> DeepBrowsingResult:
                     urls.append(link)
                     information.append(content)
 
-        return DeepBrowsingResult(urls=urls, info=information)
+        return DeepResponse(urls=urls, info=information)
     except Exception as e:
         print(f"Exception on reading {source}: {e}")
-        return DeepBrowsingResult(urls=[], info=[])
+        return DeepResponse(urls=[], info=["Could not read the page"])

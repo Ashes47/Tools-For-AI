@@ -1,5 +1,8 @@
 import requests
 from requests.auth import HTTPBasicAuth
+from tools.models import ReadURL
+from tools.searchWeb.utils import process_search_results
+from tools.readURL.generateMarkdown import generateMarkdownForPage
 from tools.searchWeb.models import SearchParams, SearchResponse, SearchResult
 import os
 
@@ -48,16 +51,38 @@ def search(params: SearchParams):
         limited_results = sorted_results[: params.limit]
 
         # Convert results to SearchResult models
-        search_results = [
-            SearchResult(
-                url=res["url"],
-                title=res["title"],
-                content=res["content"],
-                score=res.get("score"),
-                category=res.get("category"),
-            )
-            for res in limited_results
-        ]
+        if params.crawl:
+            search_results = []
+            for res in limited_results:
+                print(f"Parsing {res['url']}")
+                parsed_content = generateMarkdownForPage(ReadURL(url=res["url"])).response
+                if params.summarize and not parsed_content.startswith("Error reading Webpage: "):
+                    print(f"Summarizing {res['url']}")
+                    summarized_content = process_search_results(params.query, parsed_content)
+                    parsed_content = summarized_content
+
+                search_results.append(
+                    SearchResult(
+                        url=res["url"],
+                        title=res["title"],
+                        description=res["content"],
+                        score=res.get("score"),
+                        category=res.get("category"),
+                        content=parsed_content
+                    )
+                )
+        else:
+            search_results = [
+                SearchResult(
+                    url=res["url"],
+                    title=res["title"],
+                    description=res["content"],
+                    score=res.get("score"),
+                    category=res.get("category"),
+                    content="Set crawl to true to fetch the content of the search results."
+                )
+                for res in limited_results
+            ]
 
         return SearchResponse(
             query=data["query"], answers=data.get("answers", []), results=search_results

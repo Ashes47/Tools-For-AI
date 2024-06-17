@@ -14,8 +14,8 @@ pillow
 # Lint
 black
 
-
 # Language Community Resources
+g4f
 langchain-community
 unstructured
 minify_html
@@ -29,3 +29,4 @@ seaborn
 
 # Others
 redberry
+retry

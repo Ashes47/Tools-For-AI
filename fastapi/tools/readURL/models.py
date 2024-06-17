@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class BrowsingResult(BaseModel):
+class ContentURL(BaseModel):
     response: str
 
     class Config:

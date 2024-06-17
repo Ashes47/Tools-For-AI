@@ -2,7 +2,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class DeepBrowsingResult(BaseModel):
+class DeepResponse(BaseModel):
     urls: List[str]
     info: List[str]
 
