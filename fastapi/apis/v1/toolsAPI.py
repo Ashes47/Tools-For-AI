@@ -230,16 +230,10 @@ def deepReadWebPage(data: ReadURL, request: Request) -> DeepResponse:
 @toolsRouter.post("/searchWeb")
 async def searchWeb(data: SearchParams, request: Request) -> SearchResponse:
     """
-    Executes a search query using the specified parameters and get the results.
-
-    Parameters:
-    params (SearchParams): The search parameters including query, engines and other options.
-    use crawl (bool): Whether to use the crawler to fetch the content of the search results.
-    use summarize (bool): Whether to summarize the content of the search results.
-
-    Returns:
-    SearchResponse: A response object containing the query, answers, and filtered search results.
-
+    Search web for a query using the specified parameters.
+    SearchParams: The search parameters including query, engines etc.
+    crawl (bool): fetch content of search results
+    summarize (bool): summarize content of search results
     """
     token = request.headers["Authorization"]
     if not validateToken(token):

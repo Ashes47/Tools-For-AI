@@ -21,7 +21,5 @@ Tools:
    - Get transcript for youtube video using this tool. Share the link with the tool with a language the tool accepts.
 - searchWeb:
    - Executes a search query using the specified parameters and get the results.
-- deepReadWebpage:
-   - Read a webpage with all the webpages within the webpage using this tool.
 - readWebpage:
    - Read a webpage using this tool. Share the URL with the tool.
