@@ -24,7 +24,6 @@ from tools.graphviz.models import GraphvizRequest
 from tools.graphviz.createImage import createGraphViz
 from tools.quickchart.createImage import createQuickCharts
 from tools.quickchart.models import QuickChartRequest
-from store.saveCode import storeCodeAsFile
 from tools.threadingUtils import run_in_threadpool
 
 toolsRouter = APIRouter(prefix="/tool")
@@ -57,7 +56,6 @@ async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
 
     print(f"Mermaid Diagram Recieved : {data.mermaidText}")
     print(f"Mermaid Text Recieved : {data.diagram}")
-    storeCodeAsFile(data.mermaidText, f"mermaid/{data.diagram.value}")
 
     return await run_in_threadpool(createMermaidDiagram, data.mermaidText, data.diagram)
 
@@ -88,7 +86,6 @@ async def createPlantuml(data: PlantUML, request: Request) -> CommandResponse:
 
     print(f"Plantuml Diagram Recieved : {data.plantumlText}")
     print(f"Plantuml Text Recieved : {data.diagram}")
-    storeCodeAsFile(data.plantumlText, f"plantuml/{data.diagram.value}")
 
     return await run_in_threadpool(createPlantUML, data.plantumlText, data.diagram)
 
@@ -157,7 +154,6 @@ async def createApexcharts(data: ApexChartRequest, request: Request) -> CommandR
         raise Exception("Invalid Token")
 
     print(f"Apexcharts request received:\n{data.config}")
-    storeCodeAsFile(data.config, f"apexcharts")
 
     return await run_in_threadpool(createApexCharts, data)
 
@@ -172,7 +168,6 @@ async def createGraphviz(data: GraphvizRequest, request: Request) -> CommandResp
         raise Exception("Invalid Token")
 
     print(f"Graphviz request received:\n{data.graph}")
-    storeCodeAsFile(data.graph, f"graphviz")
 
     return await run_in_threadpool(createGraphViz, data)
 
@@ -190,7 +185,6 @@ async def createQuickChart(
         raise Exception("Invalid Token")
 
     print(f"QuickChart request received:\n{data.chart}")
-    storeCodeAsFile(data.chart, f"quickcharts")
 
     return await run_in_threadpool(createQuickCharts, data)
 

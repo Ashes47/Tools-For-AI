@@ -5,6 +5,9 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
+from apscheduler.schedulers.background import BackgroundScheduler
+import shutil
+import os
 
 # Local imports
 from constants import URL, IMAGE_DIR
@@ -54,3 +57,24 @@ def custom_openapi():
 
 
 app.openapi = custom_openapi
+
+
+# Function to clean the IMAGE_DIR
+def clean_image_dir():
+    folder = IMAGE_DIR  # Assuming 'images' is the folder where IMAGE_DIR points to
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+            print(f"Deleted {file_path}")
+        except Exception as e:
+            print(f"Failed to delete {file_path}. Reason: {e}")
+
+
+# Set up the scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(clean_image_dir, "interval", hours=24)
+scheduler.start()

@@ -1,7 +1,7 @@
 import os
 import requests
 import uuid
-from constants import GRAPHVIZ_IMAGE_DIR, IMAGE_DIR
+from constants import IMAGE_DIR
 from tools.graphviz.models import GraphvizRequest
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
@@ -18,7 +18,7 @@ def createGraphViz(data: GraphvizRequest) -> CommandResponse:
             print("Saving Image")
 
             id = str(uuid.uuid4())
-            path = os.getcwd() + f"/{IMAGE_DIR}/{GRAPHVIZ_IMAGE_DIR}"
+            path = os.getcwd() + f"/{IMAGE_DIR}"
 
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -28,7 +28,7 @@ def createGraphViz(data: GraphvizRequest) -> CommandResponse:
 
             return CommandResponse(
                 output="Image Generated",
-                imageURL=urlFor(f"{GRAPHVIZ_IMAGE_DIR}/{id}.png"),
+                imageURL=urlFor(f"{id}.png"),
             )
 
     except:

@@ -8,6 +8,3 @@ services:
     ports:
       - 8000:8000
     container_name: fastapi
-    volumes:
-      - ./fastapi/code:/fastapi/code 
-      - ./fastapi/images:/fastapi/images

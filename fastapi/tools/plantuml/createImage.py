@@ -3,7 +3,7 @@ import os
 from PIL import Image
 from plantuml import PlantUML
 import uuid
-from constants import PLANTUML_IMAGE_DIR, IMAGE_DIR
+from constants import IMAGE_DIR
 from tools.plantuml.models import Diagrams
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
@@ -29,7 +29,7 @@ def createPlantUML(plantumlText, diagram):
         print("Saving Image")
         id = str(uuid.uuid4())
         diagramDirectory = getDirectory(diagram)
-        path = os.getcwd() + f"/{IMAGE_DIR}/{PLANTUML_IMAGE_DIR}/{diagramDirectory}"
+        path = os.getcwd() + f"/{IMAGE_DIR}/{diagramDirectory}"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -37,7 +37,7 @@ def createPlantUML(plantumlText, diagram):
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
             output="Image Generated",
-            imageURL=urlFor(f"{PLANTUML_IMAGE_DIR}/{diagramDirectory}/{id}.png"),
+            imageURL=urlFor(f"{diagramDirectory}/{id}.png"),
         )
     except:
         return CommandResponse(

@@ -4,7 +4,7 @@ import os
 import io
 import requests
 import uuid
-from constants import MERMAID_IMAGE_DIR, IMAGE_DIR
+from constants import IMAGE_DIR
 from tools.mermaid.models import Diagrams
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
@@ -24,7 +24,7 @@ def createMermaidDiagram(mermaidGraph, diagram):
 
         id = str(uuid.uuid4())
         diagramDirectory = getDirectory(diagram)
-        path = os.getcwd() + f"/{IMAGE_DIR}/{MERMAID_IMAGE_DIR}/{diagramDirectory}"
+        path = os.getcwd() + f"/{IMAGE_DIR}/{diagramDirectory}"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -32,7 +32,7 @@ def createMermaidDiagram(mermaidGraph, diagram):
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
             output="Image Generated",
-            imageURL=urlFor(f"{MERMAID_IMAGE_DIR}/{diagramDirectory}/{id}.png"),
+            imageURL=urlFor(f"{diagramDirectory}/{id}.png"),
         )
 
     except:
