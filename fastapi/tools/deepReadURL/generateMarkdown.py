@@ -1,4 +1,4 @@
-from tools.deepReadURL.models import DeepResponse
+from tools.deepReadURL.models import DeepResponse, INFO
 from tools.models import ReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
@@ -22,10 +22,9 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
         link_urls = list(set(link_urls))
         if len(link_urls) > limit_pages:
             link_urls = link_urls[:limit_pages]
-        content = f"Title: {title}, Body: {minimized_body}, Links: {link_urls}, Images: {image_urls}"
 
         urls.append(source)
-        information.append(content)
+        information.append(INFO(title=title, body=minimized_body, links=link_urls, images=image_urls))
 
         def fetch_and_process(link):
             try:
@@ -37,7 +36,7 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
                 if data.summarize:
                     minimized_body = process_search_results(None, minimized_body)
 
-                content = f"Title: {title}, Body: {minimized_body}, Links: {link_urls}, Images: {image_urls}"
+                content = INFO(title=title, body=minimized_body, links=link_urls, images=image_urls)
                 return (link, content)
             except Exception as e:
                 print(f"Exception on reading {link}: {e}")
