@@ -8,6 +8,7 @@ class INFO(BaseModel):
     links: List[str]
     images: List[str]
 
+
 class DeepResponse(BaseModel):
     urls: List[str]
     info: List[INFO]

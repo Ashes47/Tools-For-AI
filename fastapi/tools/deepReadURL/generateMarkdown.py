@@ -24,7 +24,9 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
             link_urls = link_urls[:limit_pages]
 
         urls.append(source)
-        information.append(INFO(title=title, body=minimized_body, links=link_urls, images=image_urls))
+        information.append(
+            INFO(title=title, body=minimized_body, links=link_urls, images=image_urls)
+        )
 
         def fetch_and_process(link):
             try:
@@ -36,7 +38,9 @@ def deepSearchForPage(data: ReadURL) -> DeepResponse:
                 if data.summarize:
                     minimized_body = process_search_results(None, minimized_body)
 
-                content = INFO(title=title, body=minimized_body, links=link_urls, images=image_urls)
+                content = INFO(
+                    title=title, body=minimized_body, links=link_urls, images=image_urls
+                )
                 return (link, content)
             except Exception as e:
                 print(f"Exception on reading {link}: {e}")
