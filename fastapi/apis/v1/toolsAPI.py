@@ -56,7 +56,7 @@ async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
     print(f"Mermaid Diagram Recieved : {data.mermaidText}")
     print(f"Mermaid Text Recieved : {data.diagram}")
 
-    return await run_in_threadpool(createMermaidDiagram, data.mermaidText, data.diagram)
+    return await run_in_threadpool(createMermaidDiagram, data.mermaidText)
 
 
 # Create a Plantuml Diagram from text
@@ -72,7 +72,7 @@ async def createPlantuml(data: PlantUML, request: Request) -> CommandResponse:
     print(f"Plantuml Diagram Recieved : {data.plantumlText}")
     print(f"Plantuml Text Recieved : {data.diagram}")
 
-    return await run_in_threadpool(createPlantUML, data.plantumlText, data.diagram)
+    return await run_in_threadpool(createPlantUML, data.plantumlText)
 
 
 # Create a Matplotlib Diagram from text
