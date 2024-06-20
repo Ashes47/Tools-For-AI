@@ -4,12 +4,11 @@ from PIL import Image
 from plantuml import PlantUML
 import uuid
 from constants import IMAGE_DIR
-from tools.plantuml.models import Diagrams
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-def createPlantUML(plantumlText, diagram):
+def createPlantUML(plantumlText):
     try:
         # create a server object to call for your computations
         print("Calling PlantUML Server")
@@ -28,8 +27,7 @@ def createPlantUML(plantumlText, diagram):
 
         print("Saving Image")
         id = str(uuid.uuid4())
-        diagramDirectory = getDirectory(diagram)
-        path = os.getcwd() + f"/{IMAGE_DIR}/{diagramDirectory}"
+        path = os.getcwd() + f"/{IMAGE_DIR}/"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -37,50 +35,10 @@ def createPlantUML(plantumlText, diagram):
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
             output="Image Generated",
-            imageURL=urlFor(f"{diagramDirectory}/{id}.png"),
+            imageURL=urlFor(f"{id}.png"),
         )
     except:
         return CommandResponse(
             output=f"error: fix the code and try again",
             imageURL=staticURL("invalid.png"),
         )
-
-
-def getDirectory(diagram):
-    match diagram:
-        case Diagrams.UML_ACTIVITY:
-            return "uml_activity"
-        case Diagrams.ARCHIMATE:
-            return "archimate"
-        case Diagrams.ASCIIMATH:
-            return "asciimath"
-        case Diagrams.UML_CLASS:
-            return "uml_class"
-        case Diagrams.UML_COMPONENT:
-            return "uml_component"
-        case Diagrams.DEPLOYMENT:
-            return "deployment"
-        case Diagrams.DITAA:
-            return "ditaa"
-        case Diagrams.GANTT:
-            return "gantt"
-        case Diagrams.GRAPHVIZ_DOT:
-            return "graphviz_dot"
-        case Diagrams.JLATEXMATH:
-            return "jlatexmath"
-        case Diagrams.GLOBAL_KEYWORDS_OPTIONS:
-            return "global_keywords_options"
-        case Diagrams.UML_OBJECT:
-            return "uml_object"
-        case Diagrams.UML_SEQUENCE:
-            return "uml_sequence"
-        case Diagrams.UML_STATE:
-            return "uml_state"
-        case Diagrams.TIMING:
-            return "timing"
-        case Diagrams.UML_USE_CASE:
-            return "uml_use_case"
-        case Diagrams.WIRE_FRAME:
-            return "wire_frame"
-        case _:
-            raise ValueError("Invalid Diagram Type")

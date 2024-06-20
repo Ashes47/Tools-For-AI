@@ -18,6 +18,7 @@ class ReadURL(BaseModel):
     url: str
     limit: int = 10
     summarize: bool = False
+    use_openAI: bool = False
 
     class Config:
         json_schema_extra = {

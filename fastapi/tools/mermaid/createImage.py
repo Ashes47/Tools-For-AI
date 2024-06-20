@@ -5,12 +5,11 @@ import io
 import requests
 import uuid
 from constants import IMAGE_DIR
-from tools.mermaid.models import Diagrams
 from tools.models import CommandResponse
 from tools.urlBuilder import urlFor, staticURL
 
 
-def createMermaidDiagram(mermaidGraph, diagram):
+def createMermaidDiagram(mermaidGraph):
     try:
         graphbytes = mermaidGraph.encode("ascii")
 
@@ -23,8 +22,7 @@ def createMermaidDiagram(mermaidGraph, diagram):
         print("Saving Image")
 
         id = str(uuid.uuid4())
-        diagramDirectory = getDirectory(diagram)
-        path = os.getcwd() + f"/{IMAGE_DIR}/{diagramDirectory}"
+        path = os.getcwd() + f"/{IMAGE_DIR}"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -32,7 +30,7 @@ def createMermaidDiagram(mermaidGraph, diagram):
         imageFile.save(f"{path}/{id}.png")
         return CommandResponse(
             output="Image Generated",
-            imageURL=urlFor(f"{diagramDirectory}/{id}.png"),
+            imageURL=urlFor(f"{id}.png"),
         )
 
     except:
@@ -40,41 +38,3 @@ def createMermaidDiagram(mermaidGraph, diagram):
             output=f"error: fix the code and try again",
             imageURL=staticURL("invalid.png"),
         )
-
-
-def getDirectory(diagram: Diagrams) -> str:
-    match diagram:
-        case Diagrams.FLOWCHART:
-            return "flowchart"
-        case Diagrams.SEQUENCE:
-            return "sequence"
-        case Diagrams.CLASS:
-            return "class"
-        case Diagrams.STATE:
-            return "state"
-        case Diagrams.ENTITY_RELATIONSHIP:
-            return "erdiagram"
-        case Diagrams.USER_JOURNEY:
-            return "journey"
-        case Diagrams.GANTT:
-            return "gantt"
-        case Diagrams.PIE:
-            return "pie"
-        case Diagrams.QUADRANT:
-            return "quadrant"
-        case Diagrams.REQUIREMENT:
-            return "requirement"
-        case Diagrams.GITGRAPH:
-            return "gitgraph"
-        case Diagrams.C4:
-            return "c4"
-        case Diagrams.MINDMAP:
-            return "mindmap"
-        case Diagrams.TIMELINE:
-            return "timeline"
-        case Diagrams.SANKEY:
-            return "sankey"
-        case Diagrams.XYCHART:
-            return "xychart"
-        case _:
-            raise ValueError("Invalid Diagram Type")

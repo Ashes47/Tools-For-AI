@@ -47,6 +47,9 @@ class SearchParams(BaseModel):
         pattern="^(general|images|news|videos|map|science|music|files|it|social media|economy)$",
     )
     crawl: Optional[bool] = Field(False, description="Crawl the webpage for content")
+    use_openAI: Optional[bool] = Field(
+        False, description="Use OpenAI to summarize the webpage content"
+    )
     summarize: Optional[bool] = Field(
         False, description="Summarize the webpage content"
     )
