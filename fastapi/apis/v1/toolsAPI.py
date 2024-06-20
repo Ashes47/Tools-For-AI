@@ -55,7 +55,6 @@ async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
         raise Exception("Invalid Token")
 
     print(f"Mermaid Diagram Recieved : {data.mermaidText}")
-    print(f"Mermaid Text Recieved : {data.diagram}")
 
     return await run_in_threadpool(createMermaidDiagram, data.mermaidText, data.diagram)
 
@@ -69,7 +68,6 @@ async def SmartMermaid(data: SmartMermaid, request: Request) -> CommandResponse:
     if not validateToken(token):
         raise Exception("Invalid Token")
     print(f"SmartMermaid Diagram Recieved : {data.text}")
-    print(f"SmartMermaid Text Recieved : {data.diagram}")
 
     return await run_in_threadpool(generateMermaidCode, data)
 
