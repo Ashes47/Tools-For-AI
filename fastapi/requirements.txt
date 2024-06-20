@@ -16,6 +16,7 @@ black
 
 # Language Community Resources
 g4f
+openai
 langchain-community
 unstructured
 minify_html

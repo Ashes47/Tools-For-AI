@@ -14,7 +14,9 @@ def generateMarkdownForPage(data: ReadURL) -> ContentURL:
         converted_docs = md.transform_documents(docs)[0].page_content
 
         if data.summarize:
-            converted_docs = process_search_results(None, converted_docs)
+            converted_docs = process_search_results(
+                None, converted_docs, data.use_openAI
+            )
 
         return ContentURL(response=converted_docs)
     except Exception as e:
