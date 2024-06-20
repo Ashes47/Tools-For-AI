@@ -8,8 +8,7 @@ from tools.searchWeb.searchWeb import search
 from tools.readURL.models import ContentURL
 from tools.youtube.models import Transcription, TranscriptionResponse
 from tools.youtube.getTranscript import getTranscription
-from tools.mermaid.models import Mermaid, SmartMermaid
-from tools.mermaid.mermaidCoder import generateMermaidCode
+from tools.mermaid.models import Mermaid
 from tools.mermaid.createImage import createMermaidDiagram
 from tools.plantuml.models import PlantUML
 from tools.plantuml.createImage import createPlantUML
@@ -56,20 +55,7 @@ async def createMermaid(data: Mermaid, request: Request) -> CommandResponse:
 
     print(f"Mermaid Diagram Recieved : {data.mermaidText}")
 
-    return await run_in_threadpool(createMermaidDiagram, data.mermaidText, data.diagram)
-
-
-@toolsRouter.post("/SmartMermaid")
-async def SmartMermaid(data: SmartMermaid, request: Request) -> CommandResponse:
-    """Get Mermaid Image
-    This functions accepts textual explanation and diagram type and optional existing code andreturns Mermaid Image
-    """
-    token = request.headers["Authorization"]
-    if not validateToken(token):
-        raise Exception("Invalid Token")
-    print(f"SmartMermaid Diagram Recieved : {data.text}")
-
-    return await run_in_threadpool(generateMermaidCode, data)
+    return await run_in_threadpool(createMermaidDiagram, data.mermaidText)
 
 
 # Create a Plantuml Diagram from text
@@ -83,9 +69,8 @@ async def createPlantuml(data: PlantUML, request: Request) -> CommandResponse:
         raise Exception("Invalid Token")
 
     print(f"Plantuml Diagram Recieved : {data.plantumlText}")
-    print(f"Plantuml Text Recieved : {data.diagram}")
 
-    return await run_in_threadpool(createPlantUML, data.plantumlText, data.diagram)
+    return await run_in_threadpool(createPlantUML, data.plantumlText)
 
 
 # Create a Matplotlib Diagram from text
