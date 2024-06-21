@@ -27,6 +27,7 @@ youtube-transcript-api
 starlette
 matplotlib
 seaborn
+pypdf
 
 # Others
 redberry

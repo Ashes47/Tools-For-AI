@@ -2,29 +2,43 @@ from tools.readURL.models import ContentURL, ReadURL
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import MarkdownifyTransformer
 from tools.searchWeb.utils import process_search_results
+from tools.readURL.utils import download_pdf_if_appropriate
 
 
 def generateMarkdownForPage(data: ReadURL) -> ContentURL:
     try:
-        loader = AsyncHtmlLoader(data.urls)
+
+        info = {}
+        scrape_from = []
+        content = []
+        summarized_content = []
+
+        for url in data.urls:
+            docs = download_pdf_if_appropriate(url)
+            if docs is not None:
+                info[url] = docs
+            else:
+                scrape_from.append(url)
+
+        loader = AsyncHtmlLoader(scrape_from)
         docs = loader.load()
 
         md = MarkdownifyTransformer()
         converted_docs = md.transform_documents(docs)
 
-        content = []
+        for i, docs in enumerate(converted_docs):
+            info[scrape_from[i]] = docs.page_content
+
+        for url in data.urls:
+            content.append(info[url])
 
         if not data.summarize:
-            for doc in converted_docs:
-                content.append(doc.page_content)
             return ContentURL(urls=data.urls, content=content)
 
-        for converted_doc in converted_docs:
-            data = process_search_results(
-                None, converted_doc.page_content, data.use_openAI
-            )
-            content.append(data)
+        for stuff in content:
+            data = process_search_results(None, stuff, data.use_openAI)
+            summarized_content.append(data)
 
-        return ContentURL(urls=data.urls, content=content)
+        return ContentURL(urls=data.urls, content=summarized_content)
     except Exception as e:
         return ContentURL(urls=[], content=["Error reading Webpage: {e}"])
