@@ -4,14 +4,23 @@ from enum import Enum
 
 
 class SearchEngines(str, Enum):
-    google = "google"
-    brave = "brave"
-    wikipedia = "wikipedia"
-    duckduckgo = "duckduckgo"
-    github = "github"
-    arxiv = "arxiv"
-    pubmed = "pubmed"
-    youtube = "youtube"
+    google = "google"  # General web search
+    brave = "brave"  # General web search
+    wikipedia = "wikipedia"  # Encyclopedic search
+    duckduckgo = "duckduckgo"  # Privacy-focused web search
+    github = "github"  # Code repository search
+    arxiv = "arxiv"  # Scientific publications
+    pubmed = "pubmed"  # Medical publications
+    youtube = "youtube"  # Video search
+    bing = "bing"  # General web search
+    startpage = "startpage"  # Privacy-focused web search
+    qwant = "qwant"  # Privacy-focused web search
+    google_scholar = "google_scholar"  # Academic publications
+    semantic_scholar = "semantic_scholar"  # Academic publications
+    stackoverflow = "stackoverflow"  # Programming Q&A
+    reddit = "reddit"  # Social media search
+    presearch = "presearch"  # Decentralized search engine
+    yahoo = "yahoo"  # General web search
 
 
 class SafeSearch(str, Enum):
