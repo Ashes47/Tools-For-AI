@@ -1,6 +1,6 @@
 import requests
 from requests.auth import HTTPBasicAuth
-from tools.models import ReadURL
+from tools.readURL.models import ReadURL
 from tools.searchWeb.utils import process_search_results
 from tools.readURL.generateMarkdown import generateMarkdownForPage
 from tools.searchWeb.models import SearchParams, SearchResponse, SearchResult
@@ -56,8 +56,8 @@ def search(params: SearchParams):
             for res in limited_results:
                 print(f"Parsing {res['url']}")
                 parsed_content = generateMarkdownForPage(
-                    ReadURL(url=res["url"])
-                ).response
+                    ReadURL(urls=[res["url"]])
+                ).content[0]
                 if params.summarize and not parsed_content.startswith(
                     "Error reading Webpage: "
                 ):

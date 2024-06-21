@@ -1,12 +1,11 @@
-from tools.deepReadURL.models import DeepResponse, INFO
-from tools.models import ReadURL
+from tools.deepReadURL.models import DeepResponse, INFO, DeepReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
 import concurrent.futures
 from tools.searchWeb.utils import process_search_results
 
 
-def deepSearchForPage(data: ReadURL) -> DeepResponse:
+def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
     try:
         urls = []
         information = []

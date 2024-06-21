@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Request
 from auth import validateToken
-from tools.deepReadURL.models import DeepResponse
+from tools.deepReadURL.models import DeepResponse, DeepReadURL
 from tools.deepReadURL.generateMarkdown import deepSearchForPage
 from tools.readURL.generateMarkdown import generateMarkdownForPage
+from tools.readURL.models import ReadURL
 from tools.searchWeb.models import SearchParams, SearchResponse
 from tools.searchWeb.searchWeb import search
 from tools.readURL.models import ContentURL
@@ -13,7 +14,7 @@ from tools.mermaid.createImage import createMermaidDiagram
 from tools.plantuml.models import PlantUML
 from tools.plantuml.createImage import createPlantUML
 from tools.pythonShell.models import CommandRequest
-from tools.models import CommandResponse, ReadURL
+from tools.models import CommandResponse
 from tools.pythonShell.createImage import execute_command
 from tools.wordcloud.models import WordCloudRequest, create_word_cloud
 from tools.wordcloud.createImage import createWordCloud
@@ -183,13 +184,13 @@ async def readWebPage(data: ReadURL, request: Request) -> ContentURL:
     if not validateToken(token):
         raise Exception("Invalid Token")
 
-    print(f"readWebpage request received:\n{data.url}")
+    print(f"readWebpage request received:\n{data.urls}")
 
     return await run_in_threadpool(generateMarkdownForPage, data)
 
 
 @toolsRouter.post("/deepReadWebpage")
-def deepReadWebPage(data: ReadURL, request: Request) -> DeepResponse:
+def deepReadWebPage(data: DeepReadURL, request: Request) -> DeepResponse:
     """
     Deep Read Webpages
     This function allows you to navigate to the links within the input webpage and return information from all the links found + the original webpage.

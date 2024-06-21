@@ -1,10 +1,34 @@
 from pydantic import BaseModel
+from typing import List
 
 
 class ContentURL(BaseModel):
-    response: str
+    urls: List[str]
+    content: List[str]
 
     class Config:
         json_schema_extra = {
-            "example": {"response": "Adolf Hilter wiki page in Markdown format"}
+            "example": {
+                "urls": [
+                    "https://en.wikipedia.org/wiki/Adolf_Hitler",
+                    "https://en.wikipedia.org/wiki/Adolf_Hitler",
+                ],
+                "content": ["Hello World", "Hello World"],
+            }
+        }
+
+
+class ReadURL(BaseModel):
+    urls: List[str]
+    summarize: bool = False
+    use_openAI: bool = False
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "url": [
+                    "https://en.wikipedia.org/wiki/Adolf_Hitler",
+                    "https://en.wikipedia.org/wiki/Adolf_Hitler",
+                ]
+            }
         }
