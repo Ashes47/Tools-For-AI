@@ -1,7 +1,5 @@
 # Web Framework
 fastapi
-redisvl
-sentence-transformers
 
 # Server
 uvicorn
