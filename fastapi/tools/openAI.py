@@ -14,9 +14,15 @@ client = OpenAI(
 
 def summarizeOpenAI(query, text, stringifiedJson):
     if query:
-        content = f"You are a helpful assistant that summarizes the following text in English. The summary should be concise and accurate. Do not include any information that is not relevant to the text. If the text is not relevant to the query, return an empty string. The query is: {query}. The text is: {text}. Please try to have all these features {stringifiedJson} in your response."
+        content = f"You are a helpful assistant that summarizes the following text in English. The summary should be concise and accurate. Do not include any information that is not relevant to the text. If the text is not relevant to the query, return an empty string. The query is: {query}. The text is: {text}."
     else:
-        content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}. Please try to have all these features {stringifiedJson} in your response."
+        content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}."
+
+    if stringifiedJson:
+        content = (
+            content
+            + f" Please try to have all these features {stringifiedJson} in your response."
+        )
     response = client.chat.completions.create(
         messages=[{"role": "user", "content": content}],
         model=SUMMARIZE_MODEL,
@@ -45,19 +51,22 @@ def split_text_into_chunks(text):
     return chunks
 
 
-def clean_text(text):
+def clean_text(text, remove_images=True):
     # Strip HTML tags
     text = re.sub(r"<[^>]+>", "", text)
     # Convert HTML entities to their corresponding characters
     text = unescape(text)
     # Remove image URLs
-    text = re.sub(r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text)
+    if remove_images:
+        text = re.sub(
+            r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text
+        )
     # Replace multiple spaces with a single space and trim leading/trailing spaces
     return re.sub(r"\s+", " ", text).strip()
 
 
 def process_search_results(query, parsed_content, stringifiedJson=None):
-    text_chunks = split_text_into_chunks(clean_text(parsed_content))
+    text_chunks = split_text_into_chunks(clean_text(parsed_content, True))
     summarized_content = ""
     for chunk in text_chunks:
         summary = summarizeOpenAI(query, chunk, stringifiedJson)

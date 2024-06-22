@@ -7,6 +7,7 @@ from tools.youtube.models import (
     TranscriptionResponseVideo,
 )
 from typing import List
+from tools.openAI import process_search_results
 from pytube import Playlist
 import re
 
@@ -73,11 +74,26 @@ def extract_video_ids(url):
             video_ids.append(video_id)
             urls.append(url)
 
-    return video_ids, video_urls
+    return video_ids, urls
 
 
-def makeSlots(transcription) -> List[TranscriptionObject]:
+def makeSlots(transcription, summarize, stringifiedJson) -> List[TranscriptionObject]:
     result: List[TranscriptionObject] = []
+
+    if summarize:
+        parsed_content = process_search_results(
+            None, str(transcription), stringifiedJson
+        )
+        for obj in transcription:
+            last_start = obj["start"]
+            last_duration = obj["duration"]
+
+        # Calculate the total duration
+        total_duration = last_start + last_duration
+
+        return [
+            TranscriptionObject(text=parsed_content, start=0, duration=total_duration)
+        ]
 
     text = ""
     dur = 0
@@ -109,7 +125,11 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
                     video_id=videoId, languages=[data.language.value]
                 )
                 response.append(
-                    TranscriptionResponseVideo(transcript=makeSlots(transcription))
+                    TranscriptionResponseVideo(
+                        transcript=makeSlots(
+                            transcription, data.summarize, data.stringifiedJson
+                        )
+                    )
                 )
                 responseURLs.append(url)
         except Exception as e:

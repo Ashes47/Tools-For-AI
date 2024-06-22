@@ -2,7 +2,7 @@ from tools.deepReadURL.models import DeepResponse, INFO, DeepReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
 import concurrent.futures
-from tools.openAI import process_search_results
+from tools.openAI import process_search_results, clean_text
 
 
 def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
@@ -42,7 +42,10 @@ def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
                     )
 
                 content = INFO(
-                    title=title, body=minimized_body, links=link_urls, images=image_urls
+                    title=title,
+                    body=clean_text(minimized_body, True),
+                    links=link_urls,
+                    images=image_urls,
                 )
                 return (link, content)
             except Exception as e:
