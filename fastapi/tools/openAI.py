@@ -53,15 +53,19 @@ def split_text_into_chunks(text):
 
 def clean_text(text, remove_images=True):
     # Strip HTML tags
-    text = re.sub(r"<[^>]+>", "", text)
-    # Convert HTML entities to their corresponding characters
-    text = unescape(text)
-    # Remove image URLs
-    if remove_images:
-        text = re.sub(
-            r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text
-        )
-    # Replace multiple spaces with a single space and trim leading/trailing spaces
+    try:
+        text = re.sub(r"<[^>]+>", "", text)
+        # Convert HTML entities to their corresponding characters
+        text = unescape(text)
+        # Remove image URLs
+        if remove_images:
+            text = re.sub(
+                r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text
+            )
+        # Replace multiple spaces with a single space and trim leading/trailing spaces
+    except Exception as e:
+        print(f"Error cleaning text: {e}")
+        return text
     return re.sub(r"\s+", " ", text).strip()
 
 

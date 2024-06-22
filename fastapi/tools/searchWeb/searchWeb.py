@@ -56,7 +56,7 @@ def search(params: SearchParams):
             for res in limited_results:
                 print(f"Parsing {res['url']}")
                 parsed_content = generateMarkdownForPage(
-                    ReadURL(urls=[res["url"]])
+                    ReadURL(urls=[res["url"]], summarize=False)
                 ).content[0]
                 if params.summarize and not parsed_content.startswith(
                     "Error reading Webpage: "
