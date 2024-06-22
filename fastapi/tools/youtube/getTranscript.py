@@ -4,8 +4,22 @@ from tools.youtube.models import (
     Transcription,
     TranscriptionResponse,
     TranscriptionObject,
+    TranscriptionResponseVideo,
 )
 from typing import List
+from pytube import Playlist
+import re
+
+
+def get_youtube_playlist_urls(playlist_url):
+    try:
+        playlist = Playlist(playlist_url)
+        playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
+        video_urls = list(playlist.video_urls)
+        return video_urls
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return []
 
 
 def getVideoId(URL):
@@ -35,7 +49,34 @@ def getVideoId(URL):
     return None
 
 
-def makeSlots(transcription) -> TranscriptionResponse:
+def extract_video_ids(url):
+    """
+    Accepts either a YouTube video URL or a playlist URL and returns a list of video IDs.
+
+    :param url: str - The URL of a YouTube video or playlist.
+    :return: list - A list of YouTube video IDs.
+    """
+    video_ids = []
+    urls = []
+    if "playlist" in url:
+        # It's a playlist
+        video_urls = get_youtube_playlist_urls(url)
+        for video_url in video_urls:
+            video_id = getVideoId(video_url)
+            if video_id:
+                video_ids.append(video_id)
+                urls.append(video_url)
+    else:
+        # It's a single video
+        video_id = getVideoId(url)
+        if video_id:
+            video_ids.append(video_id)
+            urls.append(url)
+
+    return video_ids, video_urls
+
+
+def makeSlots(transcription) -> List[TranscriptionObject]:
     result: List[TranscriptionObject] = []
 
     text = ""
@@ -56,9 +97,23 @@ def makeSlots(transcription) -> TranscriptionResponse:
     return result
 
 
-def getTranscription(transcription: Transcription) -> TranscriptionResponse:
-    videoId = getVideoId(transcription.url)
-    transcription = YouTubeTranscriptApi.get_transcript(
-        video_id=videoId, languages=[transcription.language.value]
-    )
-    return makeSlots(transcription)
+def getTranscription(data: Transcription) -> TranscriptionResponse:
+
+    response: List[TranscriptionResponseVideo] = []
+    responseURLs = []
+    for url in data.urls:
+        try:
+            videoIds, videoURL = extract_video_ids(url)
+            for videoId, url in zip(videoIds, videoURL):
+                transcription = YouTubeTranscriptApi.get_transcript(
+                    video_id=videoId, languages=[data.language.value]
+                )
+                response.append(
+                    TranscriptionResponseVideo(transcript=makeSlots(transcription))
+                )
+                responseURLs.append(url)
+        except Exception as e:
+            print(f"Error getting transcription for {url}: {e}")
+            response.append(TranscriptionResponseVideo(transcript=[]))
+            continue
+    return TranscriptionResponse(urls=responseURLs, transcripts=response)

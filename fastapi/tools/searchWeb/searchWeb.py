@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from tools.readURL.models import ReadURL
-from tools.searchWeb.utils import process_search_results
+from tools.openAI import process_search_results
 from tools.readURL.generateMarkdown import generateMarkdownForPage
 from tools.searchWeb.models import SearchParams, SearchResponse, SearchResult
 import os
@@ -63,7 +63,7 @@ def search(params: SearchParams):
                 ):
                     print(f"Summarizing {res['url']}")
                     summarized_content = process_search_results(
-                        params.query, parsed_content, params.use_openAI
+                        params.query, parsed_content, params.stringifiedJson
                     )
                     parsed_content = summarized_content
 

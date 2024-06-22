@@ -1,13 +1,12 @@
 from tools.readURL.models import ContentURL, ReadURL
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import MarkdownifyTransformer
-from tools.searchWeb.utils import process_search_results
+from tools.openAI import process_search_results
 from tools.readURL.utils import download_pdf_if_appropriate
 
 
 def generateMarkdownForPage(data: ReadURL) -> ContentURL:
     try:
-
         info = {}
         scrape_from = []
         content = []
@@ -36,8 +35,8 @@ def generateMarkdownForPage(data: ReadURL) -> ContentURL:
             return ContentURL(urls=data.urls, content=content)
 
         for stuff in content:
-            data = process_search_results(None, stuff, data.use_openAI)
-            summarized_content.append(data)
+            information = process_search_results(None, stuff, data.stringifiedJson)
+            summarized_content.append(information)
 
         return ContentURL(urls=data.urls, content=summarized_content)
     except Exception as e:

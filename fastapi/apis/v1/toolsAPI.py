@@ -38,10 +38,10 @@ async def getTranscript(data: Transcription, request: Request) -> TranscriptionR
     if not validateToken(request.headers["Authorization"]):
         raise Exception("Invalid Token")
 
-    print(f"URL: {data.url}\nFetching transcription")
+    print(f"URL: {data.urls}\nFetching transcription")
 
     transcript = await run_in_threadpool(getTranscription, data)
-    return TranscriptionResponse(transcript=transcript)
+    return transcript
 
 
 # Create a Mermaid Diagram from text

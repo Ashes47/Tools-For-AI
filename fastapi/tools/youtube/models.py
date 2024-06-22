@@ -133,7 +133,7 @@ class Language(Enum):
 
 class Transcription(BaseModel):
     language: Language = Language.English
-    url: str
+    urls: List[str]
 
     class Config:
         json_schema_extra = {
@@ -155,7 +155,7 @@ class TranscriptionObject(BaseModel):
         }
 
 
-class TranscriptionResponse(BaseModel):
+class TranscriptionResponseVideo(BaseModel):
     transcript: List[TranscriptionObject]
 
     class Config:
@@ -164,3 +164,8 @@ class TranscriptionResponse(BaseModel):
                 "transcript": [{"text": "hey", "start": 0.00, "duration": 3.00}]
             }
         }
+
+
+class TranscriptionResponse(BaseModel):
+    urls: List[str]
+    transcripts: List[TranscriptionResponseVideo]

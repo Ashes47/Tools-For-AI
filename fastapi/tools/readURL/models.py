@@ -21,7 +21,7 @@ class ContentURL(BaseModel):
 class ReadURL(BaseModel):
     urls: List[str]
     summarize: bool = False
-    use_openAI: bool = False
+    stringifiedJson: str = None
 
     class Config:
         json_schema_extra = {

@@ -1,5 +1,7 @@
 # Web Framework
 fastapi
+redisvl
+sentence-transformers
 
 # Server
 uvicorn
@@ -15,7 +17,6 @@ pillow
 black
 
 # Language Community Resources
-g4f
 openai
 langchain-community
 unstructured
@@ -23,6 +24,7 @@ minify_html
 
 # Utilities
 plantuml
+pytube
 youtube-transcript-api
 starlette
 matplotlib

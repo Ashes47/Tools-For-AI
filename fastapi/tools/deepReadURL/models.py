@@ -18,7 +18,7 @@ class DeepReadURL(BaseModel):
     url: str
     limit: int = 10
     summarize: bool = False
-    use_openAI: bool = False
+    stringifiedJson: str = None
 
     class Config:
         json_schema_extra = {

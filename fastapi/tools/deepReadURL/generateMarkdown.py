@@ -2,7 +2,7 @@ from tools.deepReadURL.models import DeepResponse, INFO, DeepReadURL
 import requests
 from tools.deepReadURL.crawler import cleanup_html
 import concurrent.futures
-from tools.searchWeb.utils import process_search_results
+from tools.openAI import process_search_results
 
 
 def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
@@ -16,7 +16,7 @@ def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
         )
         if data.summarize:
             minimized_body = process_search_results(
-                None, minimized_body, data.use_openAI
+                None, minimized_body, data.stringifiedJson
             )
 
         limit_pages = data.limit - 1
@@ -38,7 +38,7 @@ def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
                 )
                 if data.summarize:
                     minimized_body = process_search_results(
-                        None, minimized_body, data.use_openAI
+                        None, minimized_body, data.stringifiedJson
                     )
 
                 content = INFO(
