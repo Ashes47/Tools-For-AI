@@ -18,7 +18,7 @@ def summarizeOpenAI(query, text, stringifiedJson):
     else:
         content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}."
 
-    if stringifiedJson:
+    if stringifiedJson and stringifiedJson != "":
         content = (
             content
             + f" Please try to have all these features {stringifiedJson} in your response."
@@ -75,7 +75,7 @@ def process_search_results(query, parsed_content, stringifiedJson=None):
     for chunk in text_chunks:
         summary = summarizeOpenAI(query, chunk, stringifiedJson)
         summarized_content += summary + " "
-    if stringifiedJson:
+    if stringifiedJson and stringifiedJson != "":
         try:
             return jsonOpenAI(summarized_content, stringifiedJson)
         except Exception as e:
