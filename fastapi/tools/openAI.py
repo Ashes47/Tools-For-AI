@@ -52,21 +52,38 @@ def split_text_into_chunks(text):
 
 
 def clean_text(text, remove_images=True):
-    # Strip HTML tags
     try:
-        text = re.sub(r"<[^>]+>", "", text)
+        # Strip HTML tags
+        try:
+            text = re.sub(r"<[^>]+>", "", text)
+        except Exception as e:
+            print(f"Error stripping HTML tags: {e}")
+
         # Convert HTML entities to their corresponding characters
-        text = unescape(text)
+        try:
+            text = unescape(text)
+        except Exception as e:
+            print(f"Error unescaping HTML entities: {e}")
+
         # Remove image URLs
         if remove_images:
-            text = re.sub(
-                r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text
-            )
+            try:
+                text = re.sub(
+                    r"https?://[\w\.-]+/\S+\.(jpg|jpeg|png|gif|bmp)(\?\S*)?", "", text
+                )
+            except Exception as e:
+                print(f"Error removing image URLs: {e}")
+
         # Replace multiple spaces with a single space and trim leading/trailing spaces
+        try:
+            text = re.sub(r"\s+", " ", text).strip()
+        except Exception as e:
+            print(f"Error replacing multiple spaces: {e}")
+
     except Exception as e:
-        print(f"Error cleaning text: {e}")
-        return text
-    return re.sub(r"\s+", " ", text).strip()
+        print(f"An unexpected error occurred: {e}")
+
+    return text
 
 
 def process_search_results(query, parsed_content, stringifiedJson=None):
