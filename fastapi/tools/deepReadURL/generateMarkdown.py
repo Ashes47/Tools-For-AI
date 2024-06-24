@@ -15,9 +15,7 @@ def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
             response.text, source
         )
         if data.summarize:
-            minimized_body = process_search_results(
-                None, minimized_body, data.stringifiedJson
-            )
+            minimized_body = process_search_results(None, minimized_body, data.entities)
 
         limit_pages = data.limit - 1
         link_urls = list(set(link_urls))
@@ -38,7 +36,7 @@ def deepSearchForPage(data: DeepReadURL) -> DeepResponse:
                 )
                 if data.summarize:
                     minimized_body = process_search_results(
-                        None, minimized_body, data.stringifiedJson
+                        None, minimized_body, data.entities
                     )
 
                 content = INFO(

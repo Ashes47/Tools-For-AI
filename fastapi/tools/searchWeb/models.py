@@ -59,7 +59,7 @@ class SearchParams(BaseModel):
     summarize: Optional[bool] = Field(
         False, description="Summarize the webpage content"
     )
-    stringifiedJson: Optional[str] = Field(
+    entities: Optional[str] = Field(
         None, description="Stringified JSON of response format"
     )
     language: Optional[str] = Field(

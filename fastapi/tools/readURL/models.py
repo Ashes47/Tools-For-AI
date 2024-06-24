@@ -21,7 +21,7 @@ class ContentURL(BaseModel):
 class ReadURL(BaseModel):
     urls: List[str]
     summarize: bool = False
-    stringifiedJson: str = None
+    entities: str = None
 
     class Config:
         json_schema_extra = {

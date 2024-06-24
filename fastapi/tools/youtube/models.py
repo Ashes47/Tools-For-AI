@@ -135,7 +135,7 @@ class Transcription(BaseModel):
     language: Language = Language.English
     urls: List[str]
     summarize: bool = False
-    stringifiedJson: str = None
+    entities: str = None
 
     class Config:
         json_schema_extra = {

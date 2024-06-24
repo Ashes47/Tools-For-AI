@@ -63,7 +63,7 @@ def search(params: SearchParams):
                 ):
                     print(f"Summarizing {res['url']}")
                     summarized_content = process_search_results(
-                        params.query, parsed_content, params.stringifiedJson
+                        params.query, parsed_content, params.entities
                     )
                     parsed_content = summarized_content
                 else:

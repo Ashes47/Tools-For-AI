@@ -77,13 +77,11 @@ def extract_video_ids(url):
     return video_ids, urls
 
 
-def makeSlots(transcription, summarize, stringifiedJson) -> List[TranscriptionObject]:
+def makeSlots(transcription, summarize, entities) -> List[TranscriptionObject]:
     result: List[TranscriptionObject] = []
 
     if summarize:
-        parsed_content = process_search_results(
-            None, str(transcription), stringifiedJson
-        )
+        parsed_content = process_search_results(None, str(transcription), entities)
         for obj in transcription:
             last_start = obj["start"]
             last_duration = obj["duration"]
@@ -127,7 +125,7 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
                 response.append(
                     TranscriptionResponseVideo(
                         transcript=makeSlots(
-                            transcription, data.summarize, data.stringifiedJson
+                            transcription, data.summarize, data.entities
                         )
                     )
                 )

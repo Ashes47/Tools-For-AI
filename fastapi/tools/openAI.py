@@ -12,17 +12,16 @@ client = OpenAI(
 )
 
 
-def summarizeOpenAI(query, text, stringifiedJson):
-    if query:
-        content = f"You are a helpful assistant that summarizes the following text in English. The summary should be concise and accurate. Do not include any information that is not relevant to the text. If the text is not relevant to the query, return an empty string. The query is: {query}. The text is: {text}."
-    else:
-        content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}."
+def summarizeOpenAI(query, text, entities):
 
-    if stringifiedJson and stringifiedJson != "":
-        content = (
-            content
-            + f" Please try to have all these features {stringifiedJson} in your response."
-        )
+    content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}."
+    if query:
+        content = f"You are a helpful assistant that summarizes the following text in English. The summary should be concise and accurate. Do not include any information that is not relevant to the query. If the text is not relevant to the query, return an empty string. The query is: {query}. The text is: {text}."
+
+    if entities and entities != "":
+        content = f"You are a helpful assistant. Write a concise summary of the following text in English: {text}. Data points to focus on while summarizing are {entities}. Ensure that the summary is accurate and provides a clear overview of the information presented in the original text."
+        if query:
+            content = f"You are a helpful assistant that summarizes the following text in English. The summary should be concise and accurate. Do not include any information that is not relevant to the query. If the text is not relevant to the query, return an empty string. Data points to focus on while summarizing are {entities}. Ensure that the summary is accurate and provides a clear overview of the information presented in the original text. The query is: {query}. The text is: {text}."
     response = client.chat.completions.create(
         messages=[{"role": "user", "content": content}],
         model=SUMMARIZE_MODEL,
@@ -86,15 +85,15 @@ def clean_text(text, remove_images=True):
     return text
 
 
-def process_search_results(query, parsed_content, stringifiedJson=None):
+def process_search_results(query, parsed_content, entities=None):
     text_chunks = split_text_into_chunks(clean_text(parsed_content, True))
     summarized_content = ""
     for chunk in text_chunks:
-        summary = summarizeOpenAI(query, chunk, stringifiedJson)
+        summary = summarizeOpenAI(query, chunk, entities)
         summarized_content += summary + " "
-    if stringifiedJson and stringifiedJson != "":
+    if entities and entities != "":
         try:
-            return jsonOpenAI(summarized_content, stringifiedJson)
+            return jsonOpenAI(summarized_content, entities)
         except Exception as e:
             print(f"Error creating JSON: {e}")
             return HTTPException(status_code=500, detail="Error creating JSON")
@@ -102,15 +101,18 @@ def process_search_results(query, parsed_content, stringifiedJson=None):
 
 
 @retry(tries=3, delay=2, backoff=2)
-def jsonOpenAI(response, stringifiedJson):
-    print("Json OpenAI")
+def jsonOpenAI(response, entities):
+    print(f"Json OpenAI {response}")
     response = client.chat.completions.create(
         messages=[
             {
                 "role": "system",
-                "content": f"You are a JSON generator. You must only output valid JSON. User will now share a summarised content. You must generate a JSON Object as per this Example: {stringifiedJson}. Do not answer in Markdown.",
+                "content": f"Your task is to take the unstructured text provided and convert it into a well-organized table format using JSON. Keys in the JSON object should be {entities}. Extract the relevant information from the text and populate the corresponding values in the JSON object. Ensure that the data is accurately represented and properly formatted within the JSON structure. The resulting JSON table should provide a clear, structured overview of the information presented in the original text. Do not add any new keys.",
             },
-            {"role": "user", "content": response},
+            {
+                "role": "user",
+                "content": f"Do not respond in Markdown. The text is: {response}",
+            },
         ],
         model=JSON_MODEL,
         temperature=0.7,

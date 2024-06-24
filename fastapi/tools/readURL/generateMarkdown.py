@@ -35,7 +35,7 @@ def generateMarkdownForPage(data: ReadURL) -> ContentURL:
             return ContentURL(urls=data.urls, content=clean_text(content, False))
 
         for stuff in content:
-            information = process_search_results(None, stuff, data.stringifiedJson)
+            information = process_search_results(None, stuff, data.entities)
             summarized_content.append(information)
 
         return ContentURL(urls=data.urls, content=summarized_content)
