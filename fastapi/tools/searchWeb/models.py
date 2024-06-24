@@ -100,6 +100,13 @@ class SearchParams(BaseModel):
             raise ValueError("summarize can only be true if crawl is true")
         return value
 
+    @field_validator("entities")
+    @classmethod
+    def validate_entities(cls, value, values):
+        if value and not values.data.get("summarize", False):
+            raise ValueError("entities can only be true if summarize is true")
+        return value
+
     class Config:
         json_schema_extra = {
             "example": {
