@@ -104,5 +104,4 @@ Thank you to the FastAPI community for their support and contributions to this p
 ---
 
 For any questions or issues, please open an issue on GitHub.
-
 Happy coding!
