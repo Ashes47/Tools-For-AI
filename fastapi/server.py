@@ -60,8 +60,10 @@ def custom_openapi():
 app.openapi = custom_openapi
 proxy_manager = ProxyManager()
 
+
 def update_proxy():
     proxy_manager.update_proxy_list()
+
 
 # Function to clean the IMAGE_DIR
 def clean_image_dir():

@@ -124,7 +124,9 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
             for videoId, url in zip(videoIds, videoURL):
                 print(f"Getting transcription for {url}")
                 transcription = YouTubeTranscriptApi.get_transcript(
-                    video_id=videoId, languages=[data.language.value], proxies=proxy_manager.get_proxy()
+                    video_id=videoId,
+                    languages=[data.language.value],
+                    proxies=proxy_manager.get_proxy(),
                 )
                 response.append(
                     TranscriptionResponseVideo(

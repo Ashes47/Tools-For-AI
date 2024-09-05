@@ -3,6 +3,7 @@ import requests
 import random
 from concurrent.futures import ThreadPoolExecutor
 
+
 class ProxyManager:
     _instance = None
 
@@ -13,14 +14,20 @@ class ProxyManager:
             cls._instance.update_proxy_list()  # Fetch and test proxies immediately upon creation
         return cls._instance
 
-    def update_proxy_list(self, url="https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt"):
+    def update_proxy_list(
+        self,
+        url="https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+    ):
         try:
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for HTTP errors
 
             # Split the response text by newline to get each proxy
-            proxy_lines = response.text.strip().split('\n')
-            proxies_to_test = [{'http': f'http://{proxy}', 'https': f'http://{proxy}'} for proxy in proxy_lines]
+            proxy_lines = response.text.strip().split("\n")
+            proxies_to_test = [
+                {"http": f"http://{proxy}", "https": f"http://{proxy}"}
+                for proxy in proxy_lines
+            ]
 
             # Use a ThreadPoolExecutor to test proxies concurrently
             max_workers = os.cpu_count() * 2
@@ -29,7 +36,11 @@ class ProxyManager:
                 results = executor.map(self._test_proxy, proxies_to_test)
 
             # Update the proxy list with only the working proxies
-            self.proxies = [proxy for proxy, is_working in zip(proxies_to_test, results) if is_working]
+            self.proxies = [
+                proxy
+                for proxy, is_working in zip(proxies_to_test, results)
+                if is_working
+            ]
             print(f"Updated proxy list with {len(self.proxies)} working proxies.")
         except requests.RequestException as e:
             print(f"Error fetching proxies: {e}")
