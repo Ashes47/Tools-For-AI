@@ -8,6 +8,7 @@ from starlette.templating import Jinja2Templates
 from apscheduler.schedulers.background import BackgroundScheduler
 import shutil
 import os
+from proxy import ProxyManager
 
 # Local imports
 from constants import URL, IMAGE_DIR
@@ -57,7 +58,10 @@ def custom_openapi():
 
 
 app.openapi = custom_openapi
+proxy_manager = ProxyManager()
 
+def update_proxy():
+    proxy_manager.update_proxy_list()
 
 # Function to clean the IMAGE_DIR
 def clean_image_dir():
@@ -77,4 +81,5 @@ def clean_image_dir():
 # Set up the scheduler
 scheduler = BackgroundScheduler()
 scheduler.add_job(clean_image_dir, "interval", hours=24)
+scheduler.add_job(update_proxy, "interval", hours=24)
 scheduler.start()
