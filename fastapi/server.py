@@ -83,5 +83,5 @@ def clean_image_dir():
 # Set up the scheduler
 scheduler = BackgroundScheduler()
 scheduler.add_job(clean_image_dir, "interval", hours=24)
-scheduler.add_job(update_proxy, "interval", hours=24)
+scheduler.add_job(update_proxy, "interval", hours=24 * 7)
 scheduler.start()
