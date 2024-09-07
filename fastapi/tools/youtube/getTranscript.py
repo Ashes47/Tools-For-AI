@@ -120,7 +120,7 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
     responseURLs = []
     for url in data.urls:
         try:
-            print(f"Getting transcription for {url}")
+            print(f"Getting Video Ids for {url}")
             videoIds, videoURL = extract_video_ids(url)
             for videoId, url in zip(videoIds, videoURL):
                 print(f"Getting transcription for {url}")
