@@ -115,6 +115,7 @@ def makeSlots(transcription, summarize, entities) -> List[TranscriptionObject]:
 def getTranscription(data: Transcription) -> TranscriptionResponse:
 
     proxy_manager = ProxyManager()
+    proxy = proxy_manager.get_proxy()
     response: List[TranscriptionResponseVideo] = []
     responseURLs = []
     for url in data.urls:
@@ -126,7 +127,7 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
                 transcription = YouTubeTranscriptApi.get_transcript(
                     video_id=videoId,
                     languages=[data.language.value],
-                    proxies=proxy_manager.get_proxy(),
+                    proxies=proxy,
                 )
                 response.append(
                     TranscriptionResponseVideo(
@@ -138,6 +139,7 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
                 responseURLs.append(url)
         except Exception as e:
             print(f"Error getting transcription for {url}: {e}")
+            proxy_manager.remove_and_update_proxy(proxy)
             response.append(TranscriptionResponseVideo(transcript=[]))
             continue
     return TranscriptionResponse(urls=responseURLs, transcripts=response)
