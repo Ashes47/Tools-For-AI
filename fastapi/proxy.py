@@ -2,17 +2,18 @@ import os
 import requests
 import time
 from concurrent.futures import ThreadPoolExecutor
-from constants import PROXY_PATH, MAX_WORKERS
+from constants import BLACKLISTED_PROXY_PATH, MAX_WORKERS, WORKING_PROXY_PATH
 
 
 class ProxyManager:
     _instance = None
-    blacklist_file_path = PROXY_PATH
+    blacklist_file_path = BLACKLISTED_PROXY_PATH
+    working_proxies_file_path = WORKING_PROXY_PATH
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(ProxyManager, cls).__new__(cls)
-            cls._instance.proxies = []
+            cls._instance.proxies = cls._instance.load_working_proxies()
             cls._instance.blacklist = cls._instance.load_blacklist()
             cls._instance.update_proxy_list()
         return cls._instance
@@ -28,6 +29,22 @@ class ProxyManager:
         with open(self.blacklist_file_path, "w") as file:
             for proxy in self.blacklist:
                 file.write(proxy + "\n")
+
+    def load_working_proxies(self):
+        try:
+            with open(self.working_proxies_file_path, "r") as file:
+                return [
+                    (line.strip().split(",")[0], float(line.strip().split(",")[1]))
+                    for line in file
+                    if line.strip()
+                ]
+        except FileNotFoundError:
+            return []
+
+    def save_working_proxies(self):
+        with open(self.working_proxies_file_path, "w") as file:
+            for proxy, time_taken in self.proxies:
+                file.write(f"{proxy},{time_taken}\n")
 
     def update_proxy_list(
         self,
@@ -49,19 +66,18 @@ class ProxyManager:
                 results = list(executor.map(self._test_proxy, proxies_to_test))
 
             # Store working proxies with their response times
-            working_proxies = [
+            self.proxies = [
                 (proxy["http"].split("//")[1], time_taken)
                 for proxy, (is_working, time_taken) in zip(proxies_to_test, results)
                 if is_working
             ]
             # Sort proxies by response time
-            working_proxies.sort(key=lambda x: x[1])
-
-            self.proxies = working_proxies
+            self.proxies.sort(key=lambda x: x[1])
+            self.save_working_proxies()
             print(f"Updated proxy list with {len(self.proxies)} working proxies.")
             # Update the blacklist
             self.blacklist.update(
-                set(proxy_lines) - set(proxy[0] for proxy in working_proxies)
+                set(proxy_lines) - set(proxy[0] for proxy in self.proxies)
             )
             self.save_blacklist()
         except requests.RequestException as e:

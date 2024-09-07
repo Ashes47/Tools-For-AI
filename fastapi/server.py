@@ -11,7 +11,6 @@ import os
 
 # Local imports
 from constants import URL, IMAGE_DIR
-from proxy import ProxyManager
 
 # Import Routes
 from apis.base import api_router
@@ -58,11 +57,6 @@ def custom_openapi():
 
 
 app.openapi = custom_openapi
-proxy_manager = ProxyManager()
-
-
-def update_proxy():
-    proxy_manager.update_proxy_list()
 
 
 # Function to clean the IMAGE_DIR
@@ -83,5 +77,4 @@ def clean_image_dir():
 # Set up the scheduler
 scheduler = BackgroundScheduler()
 scheduler.add_job(clean_image_dir, "interval", hours=24)
-scheduler.add_job(update_proxy, "interval", hours=24)
 scheduler.start()
