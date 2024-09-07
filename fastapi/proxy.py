@@ -84,14 +84,23 @@ class ProxyManager:
             return self.get_proxy() if self.proxies else None
 
     def remove_and_update_proxy(self, non_functional_proxy):
-        # Remove the non-functional proxy and optionally fetch more if the list is low
+        # Extract the proxy address from the dictionary for consistent handling
+        non_functional_proxy_address = non_functional_proxy["http"].split("//")[
+            1
+        ]  # assuming proxy format is always correct
+
+        # Remove the non-functional proxy by its address and update the blacklist
         self.proxies = [
-            proxy for proxy in self.proxies if proxy[0] != non_functional_proxy
+            proxy for proxy in self.proxies if proxy[0] != non_functional_proxy_address
         ]
-        self.blacklist.add(non_functional_proxy)
+        self.blacklist.add(non_functional_proxy_address)
         self.save_blacklist()
-        print(f"Removed and blacklisted non-functional proxy: {non_functional_proxy}")
-        if len(self.proxies) < 5:  # Arbitrary threshold to decide when to fetch more
+        print(
+            f"Removed and blacklisted non-functional proxy: {non_functional_proxy_address}"
+        )
+
+        # Check if we need to update the proxy list due to a low count
+        if len(self.proxies) < 5:  # Threshold to decide when to fetch more
             print("Proxy count low, updating proxy list...")
             self.update_proxy_list()
 
