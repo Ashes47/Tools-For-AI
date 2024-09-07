@@ -15,7 +15,6 @@ class ProxyManager:
             cls._instance = super(ProxyManager, cls).__new__(cls)
             cls._instance.proxies = cls._instance.load_working_proxies()
             cls._instance.blacklist = cls._instance.load_blacklist()
-            cls._instance.update_proxy_list()
         return cls._instance
 
     def load_blacklist(self):
