@@ -2,7 +2,7 @@ import os
 import requests
 import time
 from concurrent.futures import ThreadPoolExecutor
-from constants import PROXY_PATH
+from constants import PROXY_PATH, MAX_WORKERS
 
 
 class ProxyManager:
@@ -43,7 +43,7 @@ class ProxyManager:
                 if proxy not in self.blacklist
             ]
 
-            max_workers = os.cpu_count() * 2
+            max_workers = max(os.cpu_count() * 2, MAX_WORKERS)
             print(f"Testing proxies with {max_workers} workers...")
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 results = list(executor.map(self._test_proxy, proxies_to_test))
