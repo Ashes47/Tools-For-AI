@@ -115,7 +115,7 @@ def makeSlots(transcription, summarize, entities) -> List[TranscriptionObject]:
 def getTranscription(data: Transcription) -> TranscriptionResponse:
 
     proxy_manager = ProxyManager()
-    proxy = proxy_manager.get_proxy()
+    proxy = proxy_manager.get_proxy(use_paid_proxy=False)
     response: List[TranscriptionResponseVideo] = []
     responseURLs = []
     for url in data.urls:
