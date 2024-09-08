@@ -2,13 +2,19 @@ import os
 import requests
 import time
 from concurrent.futures import ThreadPoolExecutor
-from constants import BLACKLISTED_PROXY_PATH, MAX_WORKERS, WORKING_PROXY_PATH
+from constants import (
+    BLACKLISTED_PROXY_PATH,
+    MAX_WORKERS,
+    WORKING_PROXY_PATH,
+    PAID_PROXY,
+)
 
 
 class ProxyManager:
     _instance = None
     blacklist_file_path = BLACKLISTED_PROXY_PATH
     working_proxies_file_path = WORKING_PROXY_PATH
+    paid_proxy = PAID_PROXY
 
     def __new__(cls):
         if cls._instance is None:
@@ -84,7 +90,13 @@ class ProxyManager:
         except requests.RequestException as e:
             print(f"Error fetching proxies: {e}")
 
-    def get_proxy(self):
+    def get_proxy(self, use_paid_proxy=True):
+        if use_paid_proxy:
+            print(f"Using paid proxy: {self.paid_proxy}")
+            return {
+                "http": f"http://{self.paid_proxy}",
+                "https": f"https://{self.paid_proxy}",
+            }
         if self.proxies:
             # Get the proxy with the fastest response time (first in the sorted list)
             fastest_proxy, fastest_time = self.proxies[0]
