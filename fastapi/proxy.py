@@ -53,7 +53,8 @@ class ProxyManager:
 
     def update_proxy_list(
         self,
-        url="https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+        # url="https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+        url="https://sunny9577.github.io/proxy-scraper/proxies.txt",
     ):
         try:
             response = requests.get(url)

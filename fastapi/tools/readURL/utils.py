@@ -13,7 +13,7 @@ def download_pdf_if_appropriate(url):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    destination = f"{path}/{id}.png"
+    destination = f"{path}/{id}.pdf"
     try:
         with requests.get(url, stream=True) as response:
             response.raise_for_status()  # Check for HTTP errors
