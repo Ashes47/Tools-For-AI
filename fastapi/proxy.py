@@ -119,6 +119,10 @@ class ProxyManager:
             1
         ]  # assuming proxy format is always correct
 
+        if non_functional_proxy_address == self.paid_proxy:
+            print("Not removing paid proxy")
+            return
+
         # Remove the non-functional proxy by its address and update the blacklist
         self.proxies = [
             proxy for proxy in self.proxies if proxy[0] != non_functional_proxy_address
