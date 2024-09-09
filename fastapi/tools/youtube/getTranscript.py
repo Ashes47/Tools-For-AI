@@ -2,6 +2,7 @@ from proxy import ProxyManager
 from youtube_transcript_api import YouTubeTranscriptApi
 import urllib.parse as urlparse
 from tools.youtube.models import (
+    Language,
     Transcription,
     TranscriptionResponse,
     TranscriptionObject,
@@ -126,7 +127,7 @@ def getTranscription(data: Transcription) -> TranscriptionResponse:
                 print(f"Getting transcription for {url}")
                 transcription = YouTubeTranscriptApi.get_transcript(
                     video_id=videoId,
-                    languages=[data.language.value],
+                    languages=[data.language.value, Language.English_US.value],
                     proxies=proxy,
                 )
                 response.append(

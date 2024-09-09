@@ -31,6 +31,7 @@ class Language(Enum):
     Divehi = "dv"
     Dutch = "nl"
     English = "en"
+    English_US = "en-US"
     Esperanto = "eo"
     Estonian = "et"
     Ewe = "ee"
