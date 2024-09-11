@@ -121,6 +121,7 @@ celerybeat.pid
 
 # Environments
 .env
+.searxng.env
 .venv
 env/
 venv/

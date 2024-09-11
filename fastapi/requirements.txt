@@ -1,5 +1,6 @@
 # Web Framework
 fastapi
+redis 
 
 # Server
 uvicorn

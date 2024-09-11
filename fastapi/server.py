@@ -14,6 +14,7 @@ from constants import URL, IMAGE_DIR
 
 # Import Routes
 from apis.base import api_router
+from tools.searxng.searxng import searxngRouter, cleanup_expired_cache
 
 # FastAPI Config
 app = FastAPI()
@@ -27,6 +28,7 @@ app.add_middleware(
 
 ## Include routes
 app.include_router(api_router)
+app.include_router(searxngRouter)
 
 ## Mount static directories
 app.mount("/" + IMAGE_DIR, StaticFiles(directory="images"), name="images")
@@ -77,4 +79,5 @@ def clean_image_dir():
 # Set up the scheduler
 scheduler = BackgroundScheduler()
 scheduler.add_job(clean_image_dir, "interval", hours=24)
+scheduler.add_job(cleanup_expired_cache, "interval", hours=1)
 scheduler.start()
