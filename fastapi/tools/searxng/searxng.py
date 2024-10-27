@@ -1,5 +1,6 @@
 import httpx
 from redis.asyncio import Redis
+from tools.openAI import process_search_results
 from tools.readURL.models import ReadURL
 from tools.readURL.generateMarkdown import generateMarkdownForPage
 from tools.searxng.models.models import (
@@ -140,26 +141,28 @@ async def search(request: Request):
     cached_results = await get_cached_results(cache_key)
     if cached_results:
 
-        if advanced_query:
-            urls_to_crawl = [
-                item.url for item in cached_results.results[:PAGES_ADVANCED_RESULT]
-            ]
-            advanced_results = generateMarkdownForPage(
-                ReadURL(urls=urls_to_crawl, summarize=True)
+        if advanced_query and cached_results.advanced_result is None:
+
+            content = [item.content for item in cached_results.results]
+            cached_results.advanced_result = process_search_results(
+                None, " ".join(content), None
             )
-            cached_results.advanced_result = "\n".join(advanced_results.content)
 
         return cached_results
 
     results = await fetch_search_results(
         query, max_results, include_images, include_videos, advanced_query
     )
+    urls_to_crawl = [item.url for item in results.results[:PAGES_ADVANCED_RESULT]]
+    crawled_results = generateMarkdownForPage(ReadURL(urls=urls_to_crawl))
+
+    for res, con in zip(results.results, crawled_results.content):
+        res.content = con
+
     if advanced_query:
-        urls_to_crawl = [item.url for item in results.results[:PAGES_ADVANCED_RESULT]]
-        advanced_results = generateMarkdownForPage(
-            ReadURL(urls=urls_to_crawl, summarize=True)
+        results.advanced_result = process_search_results(
+            None, " ".join(crawled_results.content), None
         )
-        results.advanced_result = "\n".join(advanced_results.content)
 
     await set_cached_results(cache_key, results)
     return results
